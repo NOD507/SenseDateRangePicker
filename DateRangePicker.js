@@ -13,6 +13,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./properties","./CalendarSettings
                     qShowAlternatives: false,
                     qFrequencyMode: "V",
                     qSortCriterias: {
+                        qSortByNumeric: 1,
                         qSortByState: 1
                     }
                 },
@@ -162,7 +163,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./properties","./CalendarSettings
                         var _start, _end;  
                         var datesMap = dataPages[0].qMatrix.map(
                             function (x) {
-                                return x[0].qElemNumber;
+                                return x[0].qNum;
                             }
                             );
                          var isRange = datesMap.every(function (element, index, array) {
@@ -205,6 +206,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./properties","./CalendarSettings
                         
                     }
                     else {
+                        $('#' + dateRangeId).data('daterangepicker').setStartDate(moment());
                         $('#' + dateRangeId).data('daterangepicker').setEndDate(null);
                         $('#' + dateRangeId + ' span').html(layout.props.defaultText)
                     }
