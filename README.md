@@ -6,6 +6,9 @@ Based on http://www.daterangepicker.com/
 Can be turned into a single date picker in the Calendar Settings.
 Also at Calendar Settings can choose all language locales that moment.js supports.
 
+
+![preview](https://raw.githubusercontent.com/NOD507/SenseDateRangePicker/master/dateRangePicker.gif) 
+
 #### 1.0.3
  * Fixed firstPaint check
  
