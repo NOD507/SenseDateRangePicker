@@ -2,7 +2,7 @@
 	"name": "DateRangePicker",
 	"description": "",
 	"type": "visualization",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"icon": "extension",
 	"preview": "preview.png",
 	"author": "Nodier Torres",
