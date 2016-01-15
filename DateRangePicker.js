@@ -140,11 +140,17 @@ define(["qlik", "jquery", "./lib/moment.min", "./properties","./CalendarSettings
                 checkSelections();
       
                 function SelectRange(start, end) {
-                    self.backendApi.search(">=" + start.format(layout.qListObject.qDimensionInfo.qNumFormat.qFmt) + "<=" + end.format(layout.qListObject.qDimensionInfo.qNumFormat.qFmt))
-                        .then(
-                            function (x) {
-                                self.backendApi.acceptSearch(false);
-                            })
+
+                    qlik.currApp().getAppLayout().then(function (x) {
+                        var DateFormat = layout.qListObject.qDimensionInfo.qNumFormat.qFmt || x.qLocaleInfo.qDateFmt;
+
+                        self.backendApi.search(">=" + start.format(DateFormat) + "<=" + end.format(DateFormat))
+                            .then(
+                                function (x) {
+                                    self.backendApi.acceptSearch(false);
+                                })
+                    });
+
                 };
 
                 function checkSelections() {

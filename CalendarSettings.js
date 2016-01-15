@@ -31,7 +31,7 @@ define([], function() {
 		                        type: "string",  
                                 ref: "props.format",
 								label: "Format",
-								defaultValue: "MMMM D, YYYY"
+								defaultValue: "DD/MM/YYYY"
                             },
                             Separator:{
 		                        type: "string",  
