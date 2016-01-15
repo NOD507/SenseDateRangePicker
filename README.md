@@ -11,6 +11,7 @@ Also at Calendar Settings can choose all language locales that moment.js support
 
 #### 1.0.4
  * Check date format in app layout if there is no data at layout.qListObject.qDimensionInfo.qNumFormat.qFmt
+ 
 #### 1.0.3
  * Fixed firstPaint check
  
