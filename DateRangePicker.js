@@ -71,9 +71,10 @@ define(["qlik", "jquery", "./lib/moment.min", "./properties","./CalendarSettings
                 var html;
                 var self = this;
                 var dateRangeId = 'DateRangePicker'+layout.qInfo.qId;
-                var parentElement = 'Container' +layout.qInfo.qId;              
-              
-                if (!layout.props.var_paintDone || layout.props.var_isSingleDate !== layout.props.isSingleDate || layout.props.var_lang !== layout.props.locale || layout.props.var_format !== layout.props.format || 
+                var parentElement = 'Container' +layout.qInfo.qId;     
+                var isFirstPaint = $element.children().attr("id") !== dateRangeId;
+         
+                if (isFirstPaint || layout.props.var_isSingleDate !== layout.props.isSingleDate || layout.props.var_lang !== layout.props.locale || layout.props.var_format !== layout.props.format || 
                     layout.props.var_separator !== layout.props.separator || layout.props.var_rangeLabel !== layout.props.customRangeLabel || layout.props.var_today !== layout.props.today ||
                     layout.props.var_yesterday !== layout.props.yesterday || layout.props.var_last7 !== layout.props.lastXDays.replace("$","7") ||
                     layout.props.var_last30 !== layout.props.lastXDays.replace("$","30") || layout.props.var_thisMonth !== layout.props.thisMonth || layout.props.var_lastMonth !== layout.props.lastMonth
@@ -93,7 +94,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./properties","./CalendarSettings
                     layout.props.var_lastMonth = layout.props.lastMonth;
                     moment.locale(layout.props.var_lang);
                     
-                    if(!layout.props.var_paintDone ){ 
+                    if(isFirstPaint ){ 
                         $('#'+dateRangeId).remove();
                     }
                    html = "";
@@ -135,7 +136,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./properties","./CalendarSettings
                         }
                     });
                 }
-                
+            
                 checkSelections();
       
                 function SelectRange(start, end) {
@@ -217,8 +218,6 @@ define(["qlik", "jquery", "./lib/moment.min", "./properties","./CalendarSettings
                     return moment(jO);
                 };
 
-
-                layout.props.var_paintDone = true;
             }
 
 

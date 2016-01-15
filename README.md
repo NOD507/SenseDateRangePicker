@@ -6,6 +6,9 @@ Based on http://www.daterangepicker.com/
 Can be turned into a single date picker in the Calendar Settings.
 Also at Calendar Settings can choose all language locales that moment.js supports.
 
+#### 1.0.3
+ * Fixed firstPaint check
+ 
 #### 1.0.2
  * Fixed variable conflict with multiple instances of the extension.
 
