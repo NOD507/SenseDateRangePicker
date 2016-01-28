@@ -9,6 +9,9 @@ Also at Calendar Settings can choose all language locales that moment.js support
 
 ![preview](https://raw.githubusercontent.com/NOD507/SenseDateRangePicker/master/dateRangePicker.gif) 
 
+#### 1.0.5
+ * Fixed: Clear qDataPages in checkSelections
+ 
 #### 1.0.4
  * Check date format in app layout if there is no data at layout.qListObject.qDimensionInfo.qNumFormat.qFmt
  

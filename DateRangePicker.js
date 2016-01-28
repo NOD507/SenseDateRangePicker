@@ -1,9 +1,8 @@
-define(["qlik", "jquery", "./lib/moment.min", "./properties","./CalendarSettings", "css!./css/scoped-bootstrap.css", "css!./lib/daterangepicker.css", "./lib/daterangepicker"
+define(["qlik", "jquery", "./lib/moment.min","./CalendarSettings", "css!./css/scoped-bootstrap.css", "css!./lib/daterangepicker.css", "./lib/daterangepicker"
 ],
-    function (qlik, $, moment, props,CalendarSettings) {
+    function (qlik, $, moment,CalendarSettings) {
         'use strict';       
         return {  
-            //definition: props,
             initialProperties: {
                 version: 1.0,
                 qListObjectDef: {
@@ -94,7 +93,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./properties","./CalendarSettings
                     layout.props.var_lastMonth = layout.props.lastMonth;
                     moment.locale(layout.props.var_lang);
                     
-                    if(isFirstPaint ){ 
+                    if(!isFirstPaint){ 
                         $('#'+dateRangeId).remove();
                     }
                    html = "";
@@ -104,7 +103,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./properties","./CalendarSettings
                    html +='  <span></span> <b class="caret"></b>'
                    html +='</div>'
                    html +='</div>'
-                   
+              
                    $element.html(html);
                    
                    var rangesLiteral = {};
@@ -137,7 +136,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./properties","./CalendarSettings
                     });
                 }
             
-                checkSelections();
+               checkSelections();
       
                 function SelectRange(start, end) {
 
@@ -146,8 +145,8 @@ define(["qlik", "jquery", "./lib/moment.min", "./properties","./CalendarSettings
 
                         self.backendApi.search(">=" + start.format(DateFormat) + "<=" + end.format(DateFormat))
                             .then(
-                                function (x) {
-                                    self.backendApi.acceptSearch(false);
+                                function (x) { 
+                                   self.backendApi.acceptSearch(false);
                                 })
                     });
 
@@ -159,9 +158,11 @@ define(["qlik", "jquery", "./lib/moment.min", "./properties","./CalendarSettings
                         qLeft: 0,
                         qWidth: 2, 
                         qHeight: layout.qListObject.qDimensionInfo.qStateCounts.qSelected
-                    }];                    
-                                
-                    layout.qListObject.qDataPages.pop();
+                    }];           
+
+                     while ( layout.qListObject.qDataPages.length) {
+                         layout.qListObject.qDataPages.pop();
+                    }
 
                     self.backendApi.getData(requestPage).then(function (dataPages) {
                         var _start, _end;  
