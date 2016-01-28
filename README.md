@@ -26,3 +26,8 @@ Also at Calendar Settings can choose all language locales that moment.js support
 * Start date not clearing if there was no date to select.
 
 Still works better with a date field with all dates loaded.
+
+
+### TODO
+ * include dates made available only up to the actual dates available
+ * add user defined ranges past 6 or 12 months, etc?
