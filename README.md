@@ -9,21 +9,8 @@ Also at Calendar Settings can choose all language locales that moment.js support
 
 ![preview](https://raw.githubusercontent.com/NOD507/SenseDateRangePicker/master/dateRangePicker.gif) 
 
-#### 1.0.5
- * Fixed: Clear qDataPages in checkSelections
- 
-#### 1.0.4
- * Check date format in app layout if there is no data at layout.qListObject.qDimensionInfo.qNumFormat.qFmt
- 
-#### 1.0.3
- * Fixed firstPaint check
- 
-#### 1.0.2
- * Fixed variable conflict with multiple instances of the extension.
-
-#### 1.0.1
-* Fixed range check: Using qElemNumber only worked if the dates where loaded ordered. -> now the data is ordered and validated with qNum
-* Start date not clearing if there was no date to select.
+#### 1.0.6
+ * Added qSortByState and qSortByNumeric to properties
 
 Still works better with a date field with all dates loaded.
 
