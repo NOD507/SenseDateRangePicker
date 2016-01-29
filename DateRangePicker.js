@@ -22,41 +22,78 @@ define(["qlik", "jquery", "./lib/moment.min","./CalendarSettings", "css!./css/sc
                 type: "items",
                 component: "accordion",
                 items: {
-                    dimension: {
-                        type: "items",
-                        label: "Dimensions",
-                        ref: "qListObjectDef",
-                        min: 1,
-                        max: 1,
-                        items: {
-                            label: {
-                                type: "string",
-                                ref: "qListObjectDef.qDef.qFieldLabels.0",
-                                label: "Label",
-                                show: false
-                            },
-                            libraryId: {
-                                type: "string",
-                                component: "library-item",
-                                libraryItemType: "dimension",
-                                ref: "qListObjectDef.qLibraryId",
-                                label: "Dimension",
-                                show: function (data) {
-                                    return data.qListObjectDef && data.qListObjectDef.qLibraryId;
-                                }
-                            },
-                            field: {
-                                type: "string",
-                                expression: "always",
-                                expressionType: "dimension",
-                                ref: "qListObjectDef.qDef.qFieldDefs.0",
-                                label: "Field",
-                                show: function (data) {
-                                    return data.qListObjectDef && !data.qListObjectDef.qLibraryId;
-                                }
-                            }
-                        }
-                    },
+                  dimension: {
+					type: "items",
+					label: "Dimensions",
+					ref: "qListObjectDef",
+					min: 1,
+					max: 1,
+					items: {
+						label: {
+							type: "string",
+							ref: "qListObjectDef.qDef.qFieldLabels.0",
+							label: "Label",
+							show: false
+						},
+						libraryId: {
+							type: "string",
+							component: "library-item",
+							libraryItemType: "dimension",
+							ref: "qListObjectDef.qLibraryId",
+							label: "Dimension",
+							show: function (data) {
+								return data.qListObjectDef && data.qListObjectDef.qLibraryId;
+							}
+						},
+						field: {
+							type: "string",
+							expression: "always",
+							expressionType: "dimension",
+							ref: "qListObjectDef.qDef.qFieldDefs.0",
+							label: "Field",
+							show: function (data) {
+								return data.qListObjectDef && !data.qListObjectDef.qLibraryId;
+							}
+						},
+						qSortByState:{
+							type: "numeric",
+							component : "dropdown",
+							label : "Sort by State",
+							ref : "qListObjectDef.qDef.qSortCriterias.0.qSortByState",
+							options : [{
+								value : 1,
+								label : "Ascending"
+							}, {
+								value : 0,
+								label : "No"
+							}, {
+								value : -1,
+								label : "Descending"
+							}],
+                            show: false,
+							defaultValue : 1
+							
+						},
+						qSortByNumeric:{
+							type: "numeric",
+							component : "dropdown",
+							label : "Sort by Numeric",
+							ref : "qListObjectDef.qDef.qSortCriterias.0.qSortByNumeric",
+							options : [{
+								value : 1,
+								label : "Ascending"
+							}, {
+								value : 0,
+								label : "No"
+							}, {
+								value : -1,
+								label : "Descending"
+							}],
+                            show: false,
+							defaultValue : 1							
+						}	
+					}
+				},
                     settings: {
                         uses: "settings"
                     },
@@ -72,7 +109,7 @@ define(["qlik", "jquery", "./lib/moment.min","./CalendarSettings", "css!./css/sc
                 var dateRangeId = 'DateRangePicker'+layout.qInfo.qId;
                 var parentElement = 'Container' +layout.qInfo.qId;     
                 var isFirstPaint = $element.children().attr("id") !== parentElement;
-
+                
                 if (isFirstPaint || layout.props.var_isSingleDate !== layout.props.isSingleDate || layout.props.var_lang !== layout.props.locale || layout.props.var_format !== layout.props.format || 
                     layout.props.var_separator !== layout.props.separator || layout.props.var_rangeLabel !== layout.props.customRangeLabel || layout.props.var_today !== layout.props.today ||
                     layout.props.var_yesterday !== layout.props.yesterday || layout.props.var_last7 !== layout.props.lastXDays.replace("$","7") ||
@@ -163,7 +200,7 @@ define(["qlik", "jquery", "./lib/moment.min","./CalendarSettings", "css!./css/sc
                      while ( layout.qListObject.qDataPages.length) {
                          layout.qListObject.qDataPages.pop();
                     }
-
+       
                     self.backendApi.getData(requestPage).then(function (dataPages) {
                         var _start, _end;  
                         var datesMap = dataPages[0].qMatrix.map(
