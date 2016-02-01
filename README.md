@@ -9,6 +9,9 @@ Also at Calendar Settings can choose all language locales that moment.js support
 
 ![preview](https://raw.githubusercontent.com/NOD507/SenseDateRangePicker/master/dateRangePicker.gif) 
 
+#### 1.0.7
+ * icons inside html buttons
+ 
 #### 1.0.6
  * Added qSortByState and qSortByNumeric to properties
 

@@ -258,7 +258,7 @@ define(["qlik", "jquery", "./lib/moment.min","./CalendarSettings", "css!./css/sc
                 function fromOADate(msDate) {
                     var jO = new Date(((msDate - 25569) * 86400000));
                     var tz = jO.getTimezoneOffset();
-                    var jO = new Date(((msDate - 25569 + (tz / (60 * 24))) * 86400000));
+                        jO = new Date(((msDate - 25569 + (tz / (60 * 24))) * 86400000));
                     return moment(jO);
                 };
 
