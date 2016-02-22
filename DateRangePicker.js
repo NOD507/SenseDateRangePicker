@@ -109,8 +109,7 @@ define(["qlik", "jquery", "./lib/moment.min","./CalendarSettings", "css!./css/sc
                 var dateRangeId = 'DateRangePicker'+layout.qInfo.qId;
                 var parentElement = 'Container' +layout.qInfo.qId;     
                 var isFirstPaint = $element.children().attr("id") !== parentElement;
-   window.self = this;        
-   window.layout = layout;     
+      
                 moment.locale(layout.props.locale);
                     
                 if(!isFirstPaint){ 
