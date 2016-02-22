@@ -109,69 +109,54 @@ define(["qlik", "jquery", "./lib/moment.min","./CalendarSettings", "css!./css/sc
                 var dateRangeId = 'DateRangePicker'+layout.qInfo.qId;
                 var parentElement = 'Container' +layout.qInfo.qId;     
                 var isFirstPaint = $element.children().attr("id") !== parentElement;
-                
-                if (isFirstPaint || layout.props.var_isSingleDate !== layout.props.isSingleDate || layout.props.var_lang !== layout.props.locale || layout.props.var_format !== layout.props.format || 
-                    layout.props.var_separator !== layout.props.separator || layout.props.var_rangeLabel !== layout.props.customRangeLabel || layout.props.var_today !== layout.props.today ||
-                    layout.props.var_yesterday !== layout.props.yesterday || layout.props.var_last7 !== layout.props.lastXDays.replace("$","7") ||
-                    layout.props.var_last30 !== layout.props.lastXDays.replace("$","30") || layout.props.var_thisMonth !== layout.props.thisMonth || layout.props.var_lastMonth !== layout.props.lastMonth
-                     ) 
-                  {
-      
-                    layout.props.var_isSingleDate = layout.props.isSingleDate;
-                    layout.props.var_lang = layout.props.locale;
-                    layout.props.var_format = layout.props.format;
-                    layout.props.var_separator = layout.props.separator; 
-                    layout.props.var_rangeLabel = layout.props.customRangeLabel;
-                    layout.props.var_today = layout.props.today;
-                    layout.props.var_yesterday = layout.props.yesterday;
-                    layout.props.var_last7 = layout.props.lastXDays.replace("$","7");
-                    layout.props.var_last30 = layout.props.lastXDays.replace("$","30");
-                    layout.props.var_thisMonth = layout.props.thisMonth;
-                    layout.props.var_lastMonth = layout.props.lastMonth;
-                    moment.locale(layout.props.var_lang);
+   window.self = this;        
+   window.layout = layout;     
+                moment.locale(layout.props.locale);
                     
-                    if(!isFirstPaint){ 
-                        $('#'+dateRangeId).remove();
-                    }
-                   html = "";
-                   html +=' <div id ="' + parentElement +'">'
-                   html +='<div id="'+ dateRangeId +'" class="bootstrap_inside pull-right" style="background: #fff; cursor: pointer; padding: 0px 0px; border: 0px solid #ccc; width: 100%"; height 100%>'
-                   html +='   <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp'
-                   html +='  <span></span> <b class="caret"></b>'
-                   html +='</div>'
-                   html +='</div>'
+                if(!isFirstPaint){ 
+                    $('#'+dateRangeId).remove();
+                }
+                
+                html = "";
+                html +=' <div id ="' + parentElement +'">'
+                html +='<div id="'+ dateRangeId +'" class="bootstrap_inside pull-right" style="background: #fff; cursor: pointer; padding: 0px 0px; border: 0px solid #ccc; width: 100%"; height 100%>'
+                html +='   <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp'
+                html +='  <span></span> <b class="caret"></b>'
+                html +='</div>'
+                html +='</div>'
               
-                   $element.html(html);
-                   
-                   var rangesLiteral = {};
-                   
-                   rangesLiteral[layout.props.var_today] = [moment(), moment()];
-                   rangesLiteral[layout.props.var_yesterday] =[moment().subtract(1, 'days'), moment().subtract(1, 'days')];
-                   rangesLiteral[layout.props.var_last7] = [moment().subtract(6, 'days'), moment()];
-                   rangesLiteral[layout.props.var_last30] = [moment().subtract(29, 'days'), moment()];
-                   rangesLiteral[layout.props.var_thisMonth] = [moment().startOf('month'), moment().endOf('month')];          
-                   rangesLiteral[layout.props.var_lastMonth] = [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')];
-
-
-                   $('#' + dateRangeId).daterangepicker({
-                        singleDatePicker: layout.props.var_isSingleDate,
-                        ranges: rangesLiteral,
+                $element.html(html);
+              
+                var config = {
+                        singleDatePicker: layout.props.isSingleDate,                        
                         "locale": {
-                            "format": layout.props.var_format,
-                            "separator": layout.props.var_separator,                          
-                            "customRangeLabel": layout.props.var_rangeLabel
+                            "format": layout.props.format,
+                            "separator": layout.props.separator
                         },
                         "parentEl": parentElement,
                         "autoUpdateInput": false,
                         "autoApply": true
+                 };
+                    
+                 var rangesLiteral = {};
+                 if(layout.props.CustomRangesEnabled){                  
+                       config.locale.customRangeLabel = layout.props.customRangeLabel;
+                       config.ranges = rangesLiteral;
+                       rangesLiteral[layout.props.today] = [moment(), moment()];
+                       rangesLiteral[layout.props.yesterday] =[moment().subtract(1, 'days'), moment().subtract(1, 'days')];
+                       rangesLiteral[layout.props.lastXDays.replace("$","7")] = [moment().subtract(6, 'days'), moment()];
+                       rangesLiteral[layout.props.lastXDays.replace("$","30")] = [moment().subtract(29, 'days'), moment()];
+                       rangesLiteral[layout.props.thisMonth] = [moment().startOf('month'), moment().endOf('month')];          
+                       rangesLiteral[layout.props.lastMonth] = [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')];
+                  }
 
-                    }, function (start, end, label) {
-
-                        if (start.isValid() && end.isValid()) {
+                  $('#' + dateRangeId).daterangepicker(config,
+                   function (start, end, label) {
+                       if (start.isValid() && end.isValid()) {
                             SelectRange(start, end)
                         }
-                    });
-                }
+                   });
+                
             
                checkSelections();
       
@@ -240,10 +225,10 @@ define(["qlik", "jquery", "./lib/moment.min","./CalendarSettings", "css!./css/sc
                         $('#' + dateRangeId).data('daterangepicker').setEndDate(end._i);
                         
                         if(_start._i.toString() !== _end._i.toString()){
-                            $('#' + dateRangeId + ' span').html(start.locale(layout.props.var_lang).format(layout.props.var_format) + layout.props.var_separator + end.locale(layout.props.var_lang).format(layout.props.var_format));
+                            $('#' + dateRangeId + ' span').html(start.locale(layout.props.locale).format(layout.props.format) + layout.props.separator + end.locale(layout.props.local).format(layout.props.format));
                         }
                         else{
-                            $('#' + dateRangeId + ' span').html(start.locale(layout.props.var_lang).format(layout.props.var_format));
+                            $('#' + dateRangeId + ' span').html(start.locale(layout.props.locale).format(layout.props.format));
                         }
                         
                     }
@@ -261,6 +246,8 @@ define(["qlik", "jquery", "./lib/moment.min","./CalendarSettings", "css!./css/sc
                         jO = new Date(((msDate - 25569 + (tz / (60 * 24))) * 86400000));
                     return moment(jO);
                 };
+                
+
 
             }
 

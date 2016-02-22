@@ -3,20 +3,42 @@ define([], function() {
 			component: "expandable-items",
 			label: "Calendar Settings",
 			items: {
-				CalendarSwitch: {
-						type: "boolean",
-						component: "switch",
-						label: "Single date Switch",
-						ref: "props.isSingleDate",
-						options: [{
-							value: true,
-							translation: "properties.on"
-						}, {
-							value: false,
-							translation: "properties.off"
-						}],
-						defaultValue: false
-					},
+                Options: {
+                    type: "items",
+                    label: "Options",
+                    items:{
+                        SingleDateSwitch: {
+                            type: "boolean",
+                            component: "switch",
+                            label: "Single date Switch",
+                            ref: "props.isSingleDate",
+                            options: [{
+                                value: true,
+                                translation: "properties.on"
+                            }, {
+                                value: false,
+                                translation: "properties.off"
+                            }],
+                            defaultValue: false
+					    },
+                        CustomRangesSwitch:{
+                            type: "boolean",
+                            component: "switch",
+                            label: "Ranges Switch",
+                            ref: "props.CustomRangesEnabled",
+                            options: [{
+                                value: true,
+                                translation: "properties.on"
+                            }, {
+                                value: false,
+                                translation: "properties.off"
+                            }],
+                            defaultValue: true
+                            
+                        }
+                        
+                    }                    
+                },
 				header1: {
 					type: "items",
 					label: "Language and labels",
