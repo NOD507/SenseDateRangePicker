@@ -225,7 +225,7 @@ define(["qlik", "jquery", "./lib/moment.min","./CalendarSettings", "css!./css/sc
                         $('#' + dateRangeId).data('daterangepicker').setEndDate(end._i);
                         
                         if(_start._i.toString() !== _end._i.toString()){
-                            $('#' + dateRangeId + ' span').html(start.locale(layout.props.locale).format(layout.props.format) + layout.props.separator + end.locale(layout.props.local).format(layout.props.format));
+                            $('#' + dateRangeId + ' span').html(start.locale(layout.props.locale).format(layout.props.format) + layout.props.separator + end.locale(layout.props.locale).format(layout.props.format));
                         }
                         else{
                             $('#' + dateRangeId + ' span').html(start.locale(layout.props.locale).format(layout.props.format));
