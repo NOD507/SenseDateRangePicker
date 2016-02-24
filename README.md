@@ -9,10 +9,9 @@ Also at Calendar Settings can choose all language locales that moment.js support
 
 ![preview](https://raw.githubusercontent.com/NOD507/SenseDateRangePicker/master/dateRangePicker.gif) 
 
-#### 1.0.9
- * Added option to disable ranges. fixed typo
+#### 1.1
+ * Improved update text
 
-Still works better with a date field with all dates loaded.
 
 
 ### TODO
