@@ -9,7 +9,10 @@ Also at Calendar Settings can choose all language locales that moment.js support
 
 ![preview](https://raw.githubusercontent.com/NOD507/SenseDateRangePicker/master/dateRangePicker.gif) 
 
-#### 1.1
+#### 1.1.1
+ * changed css rule names for sense 2.2 compatibility
+
+#### 1.1.0
  * Improved text update
 
 
