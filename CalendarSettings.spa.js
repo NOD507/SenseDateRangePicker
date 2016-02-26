@@ -3,20 +3,42 @@ define([], function() {
 			component: "expandable-items",
 			label: "Calendar Settings",
 			items: {
-				CalendarSwitch: {
-						type: "boolean",
-						component: "switch",
-						label: "Single date Switch",
-						ref: "props.isSingleDate",
-						options: [{
-							value: true,
-							translation: "properties.on"
-						}, {
-							value: false,
-							translation: "properties.off"
-						}],
-						defaultValue: false
-					},
+                Options: {
+                    type: "items",
+                    label: "Options",
+                    items:{
+                        SingleDateSwitch: {
+                            type: "boolean",
+                            component: "switch",
+                            label: "Calendario de una fecha",
+                            ref: "props.isSingleDate",
+                            options: [{
+                                value: true,
+                                translation: "properties.on"
+                            }, {
+                                value: false,
+                                translation: "properties.off"
+                            }],
+                            defaultValue: false
+					    },
+                        CustomRangesSwitch:{
+                            type: "boolean",
+                            component: "switch",
+                            label: "Activar rangos",
+                            ref: "props.CustomRangesEnabled",
+                            options: [{
+                                value: true,
+                                translation: "properties.on"
+                            }, {
+                                value: false,
+                                translation: "properties.off"
+                            }],
+                            defaultValue: true
+                            
+                        }
+                        
+                    }                    
+                },
 				header1: {
 					type: "items",
 					label: "Language and labels",
@@ -31,7 +53,7 @@ define([], function() {
 		                        type: "string",  
                                 ref: "props.format",
 								label: "Format",
-								defaultValue: "MMMM D, YYYY"
+								defaultValue: "DD/MM/YYYY"
                             },
                             Separator:{
 		                        type: "string",  
@@ -49,7 +71,7 @@ define([], function() {
 								type: "string",  
                                 ref: "props.defaultText",
 								label: "Default Text",
-								defaultValue: "Click para seleccionar un rango"
+								defaultValue: "Seleccione un rango"
 							},
                             Today:{
                                 type: "string",  
