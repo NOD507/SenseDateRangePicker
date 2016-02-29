@@ -21,6 +21,18 @@ define([], function() {
                             }],
                             defaultValue: false
 					    },
+                        minDate:  {
+                            ref: "props.minDate",
+                            label: "min Date MM/DD/YYYY",
+                            type: "string",
+                            expression: "optional"
+                        },
+                        maxDate: {
+                            ref: "props.maxDate",
+                            label: "max Date MM/DD/YYYY",
+                            type: "string",
+                            expression: "optional"
+                        },
                         CustomRangesSwitch:{
                             type: "boolean",
                             component: "switch",

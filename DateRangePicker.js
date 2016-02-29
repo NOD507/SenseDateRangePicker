@@ -109,6 +109,8 @@ define(["qlik", "jquery", "./lib/moment.min", "./CalendarSettings", "css!./css/s
                 var dateRangeId = 'DateRangePicker' + layout.qInfo.qId;
                 var parentElement = 'Container' + layout.qInfo.qId;
                 var isFirstPaint = $element.children().attr("id") !== parentElement;
+                var minDate = moment(layout.props.minDate,"MM/DD/YYYY");
+                var maxDate = moment(layout.props.maxDate,"MM/DD/YYYY");
 
                 moment.locale(layout.props.locale);
 
@@ -140,6 +142,15 @@ define(["qlik", "jquery", "./lib/moment.min", "./CalendarSettings", "css!./css/s
                 };
 
                 var rangesLiteral = {};
+                
+                if(minDate.isValid()){
+                    config.minDate = minDate                 
+                }
+                
+                if(maxDate.isValid()){
+                  config.maxDate = maxDate
+                }
+               
                 if (layout.props.CustomRangesEnabled) {
                     config.locale.customRangeLabel = layout.props.customRangeLabel;
                     config.ranges = rangesLiteral;

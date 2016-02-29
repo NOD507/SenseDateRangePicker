@@ -9,6 +9,9 @@ Also at Calendar Settings can choose all language locales that moment.js support
 
 ![preview](https://raw.githubusercontent.com/NOD507/SenseDateRangePicker/master/dateRangePicker.gif) 
 
+#### 1.1.2
+ * option for min and max date
+ 
 #### 1.1.1
  * changed css rule names for sense 2.2 compatibility
 
@@ -18,5 +21,4 @@ Also at Calendar Settings can choose all language locales that moment.js support
 
 
 ### TODO
- * include dates made available only up to the actual dates available
  * add user defined ranges past 6 or 12 months, etc?
