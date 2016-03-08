@@ -111,6 +111,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./CalendarSettings", "css!./css/s
                 var isFirstPaint = $element.children().attr("id") !== parentElement;
                 var minDate = moment(layout.props.minDate,"MM/DD/YYYY");
                 var maxDate = moment(layout.props.maxDate,"MM/DD/YYYY");
+                var startDate = moment(layout.props.startDate,"MM/DD/YYYY");
 
                 moment.locale(layout.props.locale);
 
@@ -149,6 +150,10 @@ define(["qlik", "jquery", "./lib/moment.min", "./CalendarSettings", "css!./css/s
                 
                 if(maxDate.isValid()){
                   config.maxDate = maxDate
+                }
+                
+                if(startDate.isValid()){
+                  config.startDate = startDate
                 }
                
                 if (layout.props.CustomRangesEnabled) {
@@ -220,6 +225,11 @@ define(["qlik", "jquery", "./lib/moment.min", "./CalendarSettings", "css!./css/s
 
                     var _start = start || _dummy;
                     var _end = end || _dummy;
+                    var _startDate = moment();
+                    
+                    if(startDate.isValid()){
+                        _startDate = startDate;
+                    }
 
                     if (_start._i.toString() !== 'Invalid Date' && _end._i.toString() !== 'Invalid Date') {
 
@@ -235,7 +245,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./CalendarSettings", "css!./css/s
 
                     }
                     else {
-                        $('#' + dateRangeId).data('daterangepicker').setStartDate(moment());
+                        $('#' + dateRangeId).data('daterangepicker').setStartDate(_startDate);
                         $('#' + dateRangeId).data('daterangepicker').setEndDate(null);
                         $('#' + dateRangeId + ' span').html(layout.props.defaultText)
                     }

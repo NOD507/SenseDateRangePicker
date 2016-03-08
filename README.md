@@ -9,6 +9,9 @@ Also at Calendar Settings can choose all language locales that moment.js support
 
 ![preview](https://raw.githubusercontent.com/NOD507/SenseDateRangePicker/master/dateRangePicker.gif) 
 
+#### 1.1.3
+ * option for start date and properties as expressions
+ 
 #### 1.1.2
  * option for min and max date
  
