@@ -139,6 +139,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./CalendarSettings", "css!./css/s
                     "parentEl": "#grid",
                     "autoUpdateInput": false,
                     "autoApply": true,
+                    "opens": $element.offset().left < 500? "right": "left",
                     "id": layout.qInfo.qId
                 };
 

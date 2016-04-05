@@ -9,6 +9,9 @@ Also at Calendar Settings can choose all language locales that moment.js support
 
 ![preview](https://raw.githubusercontent.com/NOD507/SenseDateRangePicker/master/dateRangePicker.gif) 
 
+#### 1.1.4
+ * fixed out of screen presentation issue when the daterangepicker was set on the left of the screen
+
 #### 1.1.3
  * option for start date and properties as expressions
  
