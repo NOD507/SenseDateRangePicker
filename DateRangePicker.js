@@ -181,7 +181,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./CalendarSettings", "css!./css/s
 
                 function SelectRange(start, end) {
                     qlik.currApp().getAppLayout().then(function (x) {
-                        var DateFormat = layout.qListObject.qDimensionInfo.qNumFormat.qFmt || x.qLocaleInfo.qDateFmt;
+                        var DateFormat = "YYYY-MM-DD";
 
                         self.backendApi.search(">=" + start.format(DateFormat) + "<=" + end.format(DateFormat))
                             .then(
