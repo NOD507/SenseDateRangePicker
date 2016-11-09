@@ -180,8 +180,8 @@ define(["qlik", "jquery", "./lib/moment.min", "./CalendarSettings", "css!./css/s
                 checkSelections();
 
                 function SelectRange(start, end) {
-                    qlik.currApp().getAppLayout().then(function (x) {
-                        var DateFormat = layout.qListObject.qDimensionInfo.qNumFormat.qFmt || x.qLocaleInfo.qDateFmt;
+                    qlik.currApp().getAppLayout().then(function (app) {
+                        var DateFormat = layout.qListObject.qDimensionInfo.qNumFormat.qFmt || app.layout.qLocaleInfo.qDateFmt;                   
 
                         self.backendApi.search(">=" + start.format(DateFormat) + "<=" + end.format(DateFormat))
                             .then(
