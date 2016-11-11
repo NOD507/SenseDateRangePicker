@@ -9,6 +9,9 @@ Also at Calendar Settings can choose all language locales that moment.js support
 
 ![preview](https://raw.githubusercontent.com/NOD507/SenseDateRangePicker/master/dateRangePicker.gif) 
 
+#### 1.1.6
+ * fixed today option in ranges disappears when max date is set to today. 
+
 #### 1.1.5
  * fixed date format fallback. 
 

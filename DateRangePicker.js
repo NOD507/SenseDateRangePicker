@@ -160,7 +160,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./CalendarSettings", "css!./css/s
                 if (layout.props.CustomRangesEnabled) {
                     config.locale.customRangeLabel = layout.props.customRangeLabel;
                     config.ranges = rangesLiteral;
-                    rangesLiteral[layout.props.today] = [moment(), moment()];
+                    rangesLiteral[layout.props.today] = [moment().startOf('day'), moment().startOf('day')];
                     rangesLiteral[layout.props.yesterday] = [moment().subtract(1, 'days'), moment().subtract(1, 'days')];
                     rangesLiteral[layout.props.lastXDays.replace("$", "7")] = [moment().subtract(6, 'days'), moment()];
                     rangesLiteral[layout.props.lastXDays.replace("$", "30")] = [moment().subtract(29, 'days'), moment()];
