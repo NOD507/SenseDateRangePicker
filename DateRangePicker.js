@@ -136,9 +136,13 @@ define(["qlik", "jquery", "./lib/moment.min", "./CalendarSettings", "css!./css/s
                         "format": layout.props.format,
                         "separator": layout.props.separator
                     },
+                    "rangeOptions": {
+                        "showInvalidRanges": layout.props.showInvalidRanges
+                    },
+                    "disableDateInputFields": layout.props.disableDateInputFields,
                     "parentEl": "#grid",
                     "autoUpdateInput": false,
-                    "autoApply": true,
+                    "autoApply": false,
                     "opens": $element.offset().left < 500? "right": "left",
                     "id": layout.qInfo.qId
                 };
@@ -160,12 +164,21 @@ define(["qlik", "jquery", "./lib/moment.min", "./CalendarSettings", "css!./css/s
                 if (layout.props.CustomRangesEnabled) {
                     config.locale.customRangeLabel = layout.props.customRangeLabel;
                     config.ranges = rangesLiteral;
-                    rangesLiteral[layout.props.today] = [moment().startOf('day'), moment().startOf('day')];
-                    rangesLiteral[layout.props.yesterday] = [moment().subtract(1, 'days'), moment().subtract(1, 'days')];
-                    rangesLiteral[layout.props.lastXDays.replace("$", "7")] = [moment().subtract(6, 'days'), moment()];
-                    rangesLiteral[layout.props.lastXDays.replace("$", "30")] = [moment().subtract(29, 'days'), moment()];
-                    rangesLiteral[layout.props.thisMonth] = [moment().startOf('month'), moment().endOf('month')];
-                    rangesLiteral[layout.props.lastMonth] = [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')];
+                    if(layout.props.enableToday) rangesLiteral[layout.props.today] = [moment().startOf('day'), moment().startOf('day')];
+                    if(layout.props.enableYesterday) rangesLiteral[layout.props.yesterday] = [moment().subtract(1, 'days'), moment().subtract(1, 'days')];
+                    // if(layout.props.enableToday) rangesLiteral[layout.props.lastXDays.replace("$", "7")] = [moment().subtract(6, 'days'), moment()];
+                    if(layout.props.enableLastXDays) rangesLiteral[layout.props.lastXDays.replace("$", "30")] = [moment().subtract(29, 'days'), moment()];
+                    if(layout.props.enableThisMonth) rangesLiteral[layout.props.thisMonth] = [moment().startOf('month'), moment().endOf('month')];
+                    if(layout.props.enableLastMonth) rangesLiteral[layout.props.lastMonth] = [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')];
+                    
+                    if(layout.props.enableCurrentQuarter) rangesLiteral[layout.props.currentQuarter] = [moment().startOf('quarter'), moment().endOf('quarter')];
+                    if(layout.props.enableLastQuarter) rangesLiteral[layout.props.lastQuarter] = [moment().startOf('quarter').subtract(1, 'quarter'), moment().startOf('quarter').subtract(1, 'day')];
+                    if(layout.props.enableCurrentYear) rangesLiteral[layout.props.currentYear] = [moment().startOf('year'), moment().endOf('year')];                    
+                    if(layout.props.enableLastYear) rangesLiteral[layout.props.lastYear] = [moment().startOf('year').subtract(1, 'years'), moment().startOf('year').subtract(1, 'days')];
+                    if(layout.props.enableQuarterToDate) rangesLiteral[layout.props.quarterToDate] = [moment().startOf('quarter'), moment()];
+                    if(layout.props.enableYearToDate) rangesLiteral[layout.props.yearToDate] = [moment().startOf('year'), moment()];
+                    if(layout.props.enableRolling12Months) rangesLiteral[layout.props.rolling12Months] = [moment().subtract(12, 'months'), moment()];
+                    if(layout.props.enableRolling12MonthsFull) rangesLiteral[layout.props.rolling12MonthsFull] = [moment().subtract(12, 'months').startOf('month'), moment().startOf('month').subtract(1, 'days')];
                 }
 
                 $('#' + dateRangeId).daterangepicker(config,
@@ -211,9 +224,12 @@ define(["qlik", "jquery", "./lib/moment.min", "./CalendarSettings", "css!./css/s
                                 rows = dataPages[0].qMatrix.length;
 
                             UpdateText(start, end);
-
-                            if (rows !== end.diff(start, 'days') + 1) {
-                                $('#' + dateRangeId + ' span').html($('#' + dateRangeId + ' span').html() + ' [' + rows + ' / ' + (end.diff(start, 'days') + 1) + ']')
+                            
+                            // show records vs dates available in calendar dropdown text 
+                            if(layout.props.isSelectionDetailsEnabled) {
+                                if (rows !== end.diff(start, 'days') + 1) {
+                                    $('#' + dateRangeId + ' span').html($('#' + dateRangeId + ' span').html() + ' [' + rows + ' / ' + (end.diff(start, 'days') + 1) + ']')
+                                }
                             }
                         });
                     }

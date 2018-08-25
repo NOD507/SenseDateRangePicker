@@ -202,6 +202,14 @@ changed left and right rule names to prevent clash with sense client css */
       background: #08c;
       border: 1px solid #08c;
       color: #fff; }
+  .ranges li.disableRange {
+    background: #f5f5f5;
+    color: #999; }
+    .ranges li.disableRange:hover {
+      background: #f5f5f5;
+      border: 1px solid #f5f5f5;
+      color: #999;
+      cursor: not-allowed }
 
 /*  Larger Screen Styling */
 @media (min-width: 564px) {
