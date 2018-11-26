@@ -1,0 +1,64 @@
+version: 2
+
+defaults: &defaults
+    working_directory: ~/qlik-date-picker
+    docker:
+      - image: circleci/node:7
+    environment:
+      GITHUB_ORG: "qlik-oss"
+      GITHUB_REPO: "SenseDateRangePicker"
+      PACKAGE_NAME: "qlik-date-picker"
+
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install
+      - run:
+          name: Build
+          command: npm run build:zip
+      - persist_to_workspace:
+          root: ~/qlik-date-picker
+          paths:
+            - dist
+  release:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/qlik-date-picker
+      - run:
+          name: Install GHR
+          command: |
+            sudo chmod +x ./.circleci/install-ghr.sh
+            ./.circleci/install-ghr.sh
+      - run:
+          name: Create github release
+          command: |
+            sudo chmod +x ./.circleci/get-package-version.sh
+            export PACKAGE_VERSION=$(./.circleci/get-package-version.sh)
+            echo "Version: ${PACKAGE_VERSION}"
+            sudo chmod +x ./.circleci/create-release.sh
+            ./.circleci/create-release.sh $GITHUB_ORG $GITHUB_REPO $PACKAGE_NAME $PACKAGE_VERSION
+
+workflows:
+  version: 2
+  build-release:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only:
+                - /v.*/
+      - release:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only:
+                - /v.*/
