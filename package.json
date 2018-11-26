@@ -3,7 +3,7 @@
     "version": "1.2.3",
     "description": "A calendar object that allows a user to make selections in a date field.",
     "private": true,
-    "homepage": "https://github.com/NOD507/SenseDateRangePicker",
+    "homepage": "http://branch.qlik.com/#/project/5697a878dcc497f80ed514bf",
     "repository": "https://github.com/qlik-oss/SenseDateRangePicker/tree/qlik-date-picker",
     "author": "Nodier Torres",
     "license": "MIT",
