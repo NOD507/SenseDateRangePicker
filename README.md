@@ -1,42 +1,38 @@
 # SenseDateRangePicker
-A date range picker extension for qliksense
+A calendar object that allows a user to make selections in a date field. This extension is a part of dashboard bundle, first delivered with Qlik Sense November 2018.
 
 Based on http://www.daterangepicker.com/
 
-Can be turned into a single date picker in the Calendar Settings.
-Also at Calendar Settings can choose all language locales that moment.js supports.
+# Get Started
 
+## Installation
+1. Download the extension zip, `qlik-date-picker.zip`, from the latest release (https://github.com/qlik-oss/SenseDateRangePicker/releases/latest)
+2. Install the extension:
 
-![preview](https://raw.githubusercontent.com/NOD507/SenseDateRangePicker/master/dateRangePicker.gif) 
+    a. **Qlik Sense Desktop**: unzip to a directory under [My Documents]/Qlik/Sense/Extensions.
+    
+    b. **Qlik Sense Server**: import the zip file in the QMC.
 
-#### 1.1.6
- * fixed today option in ranges disappears when max date is set to today. 
+# Developing the extension
 
-#### 1.1.5
- * fixed date format fallback. 
+If you want to do code changes to the extension follow these simple steps to get going.
 
-#### 1.1.4
- * fixed out of screen presentation issue when the daterangepicker was set on the left of the screen
+1. Get Qlik Sense Desktop
+1. Create a new app and add qsVariable to a sheet.
+2. Clone the repository
+3. Run `npm install`
+4. Change the path to `/dist` folder in `gulpfile.js(row 8)` to be your local extensions folder. It will be something like `C:/Users/<user>/Documents/Qlik/Sense/Extensions/qlik-date-picker`.
+5. Run `npm run build:debug` - this command should output unminified code to the path configured in step four.
 
-#### 1.1.3
- * option for start date and properties as expressions
- 
-#### 1.1.2
- * option for min and max date
- 
-#### 1.1.1
- * changed css rule names for sense 2.2 compatibility
+```
+// Minified output to /dist folder.
+$ npm run build
+```
 
-#### 1.1.0
- * Improved text update
+```
+// Outputs a .zip file to /dist folder.
+$ npm run build:zip
+```
 
-
-
-### TODO
- * add user defined ranges past 6 or 12 months, etc?
- 
- 
- 
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
+# Original Author
+[NOD507](https://github.com/NOD507)
