@@ -78,15 +78,18 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
             initialProperties: {
                 version: 1.0,
                 qListObjectDef: {
+                    qDef: {
+                        autoSort: false,
+                        qSortCriterias: [
+                            {qSortByNumeric: -1},
+                            {qSortByState: 1},    
+                        ],
+                    },
                     qShowAlternatives: true,
                     qFrequencyMode: "V",
-                    qSortCriterias: {
-                        qSortByNumeric: 1,
-                        qSortByState: 1
-                    },
                     qInitialDataFetch: [{
-                        qWidth: 2,
-                        qHeight: 5000
+                        qWidth: 1,
+                        qHeight: 10000
                     }]
                 },
                 advanced: false
