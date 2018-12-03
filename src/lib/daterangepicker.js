@@ -16,7 +16,7 @@
 
     if (typeof define === 'function' && define.amd ) {  
       define(['./moment.min', 'jquery', 'exports'], function(momentjs, $, exports) {   
-        root.daterangepicker = factory(root, exports, momentjs, $);
+        root.qlikdaterangepicker = factory(root, exports, momentjs, $);
       });
   
     } else if (typeof exports !== 'undefined') {
@@ -35,10 +35,10 @@
   
     // Finally, as a browser global.
     } else { 
-      root.daterangepicker = factory(root, {}, root.moment || moment, (root.jQuery || root.Zepto || root.ender || root.$));
+      root.qlikdaterangepicker = factory(root, {}, root.moment || moment, (root.jQuery || root.Zepto || root.ender || root.$));
     }
   
-  }(this || {}, function(root, daterangepicker, moment, $) { // 'this' doesn't exist on a server
+  }(this || {}, function(root, qlikdaterangepicker, moment, $) { // 'this' doesn't exist on a server
   
       var DateRangePicker = function(element, options, cb) {
   
@@ -104,10 +104,10 @@
   
           //html template for the picker UI
           if (typeof options.template !== 'string')
-              options.template = '<div id= "dropDown_' + options.id + '" div class="daterangepicker dropdown-menu" style="display:none">' +
+              options.template = '<div id= "dropDown_' + options.id + '" div class="qlik-daterangepicker dropdown-menu" style="display:none">' +
                   '<div class="calendar dpleft">' +
-                      '<div class="daterangepicker_input">' +
-                        '<input class="input-mini" type="text" name="daterangepicker_start" value="" />' +
+                      '<div class="qlik-daterangepicker_input">' +
+                        '<input class="input-mini" type="text" name="qlik-daterangepicker_start" value="" />' +
                         '<i class="lui-icon lui-icon--calendar"></i>' +
                         '<div class="calendar-time">' +
                           '<div></div>' +
@@ -117,8 +117,8 @@
                       '<div class="calendar-table"></div>' +
                   '</div>' +
                   '<div class="calendar dpright">' +
-                      '<div class="daterangepicker_input">' +
-                        '<input class="input-mini" type="text" name="daterangepicker_end" value="" />' +
+                      '<div class="qlik-daterangepicker_input">' +
+                        '<input class="input-mini" type="text" name="qlik-daterangepicker_end" value="" />' +
                         '<i class="lui-icon lui-icon--calendar"></i>' +
                         '<div class="calendar-time">' +
                           '<div></div>' +
@@ -329,7 +329,7 @@
                   // If the end of the range is before the minimum or the start of the range is
                   // after the maximum, disable this range option .
                   var disabled = (this.minDate && end.isBefore(this.minDate)) || (maxDate && start.isAfter(maxDate));
-  
+
                   var elem = document.createElement('textarea');
                   elem.innerHTML = range;
                   var rangeHtml = elem.value;
@@ -372,7 +372,7 @@
               this.container.find('.calendar.dpleft').addClass('single');
               this.container.find('.calendar.dpleft').show();
               this.container.find('.calendar.dpright').hide();
-              this.container.find('.daterangepicker_input input, .daterangepicker_input i').hide();
+              this.container.find('.qlik-daterangepicker_input input, .qlik-daterangepicker_input i').hide();
               if (!this.timePicker) {
                   this.container.find('.ranges').hide();
               }
@@ -406,34 +406,34 @@
           //
   
           this.container.find('.calendar')
-              .on('click.daterangepicker', '.prev.available', $.proxy(this.clickPrev, this))
-              .on('click.daterangepicker', '.next.available', $.proxy(this.clickNext, this))
-              .on('click.daterangepicker', 'td.available', $.proxy(this.clickDate, this))
-              .on('mouseenter.daterangepicker', 'td.available', $.proxy(this.hoverDate, this))
-              .on('mouseleave.daterangepicker', 'td.available', $.proxy(this.updateFormInputs, this))
-              .on('change.daterangepicker', 'select.yearselect', $.proxy(this.monthOrYearChanged, this))
-              .on('change.daterangepicker', 'select.monthselect', $.proxy(this.monthOrYearChanged, this))
-              .on('change.daterangepicker', 'select.hourselect,select.minuteselect,select.secondselect,select.ampmselect', $.proxy(this.timeChanged, this))
-              .on('click.daterangepicker', '.daterangepicker_input input', $.proxy(this.showCalendars, this))
-              //.on('keyup.daterangepicker', '.daterangepicker_input input', $.proxy(this.formInputsChanged, this))
-              .on('change.daterangepicker', '.daterangepicker_input input', $.proxy(this.formInputsChanged, this));
+              .on('click.qlik-daterangepicker', '.prev.available', $.proxy(this.clickPrev, this))
+              .on('click.qlik-daterangepicker', '.next.available', $.proxy(this.clickNext, this))
+              .on('click.qlik-daterangepicker', 'td.available', $.proxy(this.clickDate, this))
+              .on('mouseenter.qlik-daterangepicker', 'td.available', $.proxy(this.hoverDate, this))
+              .on('mouseleave.qlik-daterangepicker', 'td.available', $.proxy(this.updateFormInputs, this))
+              .on('change.qlik-daterangepicker', 'select.yearselect', $.proxy(this.monthOrYearChanged, this))
+              .on('change.qlik-daterangepicker', 'select.monthselect', $.proxy(this.monthOrYearChanged, this))
+              .on('change.qlik-daterangepicker', 'select.hourselect,select.minuteselect,select.secondselect,select.ampmselect', $.proxy(this.timeChanged, this))
+              .on('click.qlik-daterangepicker', '.qlik-daterangepicker_input input', $.proxy(this.showCalendars, this))
+              //.on('keyup.qlik-daterangepicker', '.qlik-daterangepicker_input input', $.proxy(this.formInputsChanged, this))
+              .on('change.qlik-daterangepicker', '.qlik-daterangepicker_input input', $.proxy(this.formInputsChanged, this));
   
           this.container.find('.ranges')
-              .on('click.daterangepicker', 'button.applyBtn', $.proxy(this.clickApply, this))
-              .on('click.daterangepicker', 'button.cancelBtn', $.proxy(this.clickCancel, this))
-              .on('click.daterangepicker', 'li', $.proxy(this.clickRange, this))
-              .on('mouseenter.daterangepicker', 'li', $.proxy(this.hoverRange, this))
-              .on('mouseleave.daterangepicker', 'li', $.proxy(this.updateFormInputs, this));
+              .on('click.qlik-daterangepicker', 'button.applyBtn', $.proxy(this.clickApply, this))
+              .on('click.qlik-daterangepicker', 'button.cancelBtn', $.proxy(this.clickCancel, this))
+              .on('click.qlik-daterangepicker', 'li', $.proxy(this.clickRange, this))
+              .on('mouseenter.qlik-daterangepicker', 'li', $.proxy(this.hoverRange, this))
+              .on('mouseleave.qlik-daterangepicker', 'li', $.proxy(this.updateFormInputs, this));
   
           if (this.element.is('input')) {
               this.element.on({
-                  'click.daterangepicker': $.proxy(this.show, this),
-                  'focus.daterangepicker': $.proxy(this.show, this),
-                  'keyup.daterangepicker': $.proxy(this.elementChanged, this),
-                  'keydown.daterangepicker': $.proxy(this.keydown, this)
+                  'click.qlik-daterangepicker': $.proxy(this.show, this),
+                  'focus.qlik-daterangepicker': $.proxy(this.show, this),
+                  'keyup.qlik-daterangepicker': $.proxy(this.elementChanged, this),
+                  'keydown.qlik-daterangepicker': $.proxy(this.keydown, this)
               });
           } else {
-              this.element.on('click.daterangepicker', $.proxy(this.toggle, this));
+              this.element.on('click.qlik-daterangepicker', $.proxy(this.toggle, this));
           }
   
           //
@@ -525,9 +525,9 @@
               this.container.find('.calendar.active').removeClass('active');
                   
               if (this.endDate) {
-                  this.container.find('input[name="daterangepicker_start"]').closest('.calendar').addClass('active');
+                  this.container.find('input[name=qlik-daterangepicker_start]').closest('.calendar').addClass('active');
               } else {
-                  this.container.find('input[name="daterangepicker_end"]').closest('.calendar').addClass('active');
+                  this.container.find('input[name=qlik-daterangepicker_end]').closest('.calendar').addClass('active');
               }
               this.updateMonthsInView();
               this.updateCalendars();
@@ -958,16 +958,16 @@
   
           updateFormInputs: function() {
               //ignore mouse movements while an above-calendar text input has focus
-              if (this.container.find('input[name=daterangepicker_start]').is(":focus") || this.container.find('input[name=daterangepicker_end]').is(":focus"))
+              if (this.container.find('input[name=qlik-daterangepicker_start]').is(":focus") || this.container.find('input[name=qlik-daterangepicker_end]').is(":focus"))
                   return;
   
-              this.container.find('input[name=daterangepicker_start]').val(this.startDate.format(this.locale.format));
+              this.container.find('input[name=qlik-daterangepicker_start]').val(this.startDate.format(this.locale.format));
   
               if (this.endDate?this.endDate._isValid:false){
-                   this.container.find('input[name=daterangepicker_end]').val(this.endDate.format(this.locale.format));
+                   this.container.find('input[name=qlik-daterangepicker_end]').val(this.endDate.format(this.locale.format));
               }
               else{
-                   this.container.find('input[name=daterangepicker_end]').val("")
+                   this.container.find('input[name=qlik-daterangepicker_end]').val("")
               }
               
   
@@ -1044,16 +1044,16 @@
   
               // Bind global datepicker mousedown for hiding and
               $(document)
-                .on('mousedown.daterangepicker', this._outsideClickProxy)
+                .on('mousedown.qlik-daterangepicker', this._outsideClickProxy)
                 // also support mobile devices
-                .on('touchend.daterangepicker', this._outsideClickProxy)
+                .on('touchend.qlik-daterangepicker', this._outsideClickProxy)
                 // also explicitly play nice with Bootstrap dropdowns, which stopPropagation when clicking them
-                .on('click.daterangepicker', '[data-toggle=dropdown]', this._outsideClickProxy)
+                .on('click.qlik-daterangepicker', '[data-toggle=dropdown]', this._outsideClickProxy)
                 // and also close when focus changes to outside the picker (eg. tabbing between controls)
-                .on('focusin.daterangepicker', this._outsideClickProxy);
+                .on('focusin.qlik-daterangepicker', this._outsideClickProxy);
   
               // Reposition the picker if the window is resized while it's open
-             $(window).on('resize.daterangepicker', $.proxy(function(e) { this.move(e); }, this));
+             $(window).on('resize.qlik-daterangepicker', $.proxy(function(e) { this.move(e); }, this));
   
               this.oldStartDate = this.startDate.clone();
               this.oldEndDate = this.endDate.clone();
@@ -1061,7 +1061,7 @@
               this.updateView();
               this.container.show();
               this.move();
-              this.element.trigger('show.daterangepicker', this);
+              this.element.trigger('show.qlik-daterangepicker', this);
               this.isShowing = true;
           },
   
@@ -1082,12 +1082,12 @@
               //if picker is attached to a text input, update it
               this.updateElement();
   
-              $(document).off('.daterangepicker');
-              $(window).off('.daterangepicker');
+              $(document).off('.qlik-daterangepicker');
+              $(window).off('.qlik-daterangepicker');
               this.container.removeClass('in-selection');
               this.applyClicked = false;
               this.container.hide();
-              this.element.trigger('hide.daterangepicker', this);
+              this.element.trigger('hide.qlik-daterangepicker', this);
               this.isShowing = false;
           },
   
@@ -1112,21 +1112,21 @@
                   ) return;
               this.hide();
           },
-  
+
           showCalendars: function() {
               this.container.addClass('show-calendar');
               this.move();
-              this.element.trigger('showCalendar.daterangepicker', this);
+              this.element.trigger('showCalendar.qlik-daterangepicker', this);
           },
   
           hideCalendars: function() {
               this.container.removeClass('show-calendar');
-              this.element.trigger('hideCalendar.daterangepicker', this);
+              this.element.trigger('hideCalendar.qlik-daterangepicker', this);
           },
   
           hoverRange: function(e) {
               //ignore mouse movements while an above-calendar text input has focus
-              if (this.container.find('input[name=daterangepicker_start]').is(":focus") || this.container.find('input[name=daterangepicker_end]').is(":focus"))
+              if (this.container.find('input[name=qlik-daterangepicker_start]').is(":focus") || this.container.find('input[name=qlik-daterangepicker_end]').is(":focus"))
                   return;
   
               var label = e.target.innerHTML;
@@ -1134,10 +1134,10 @@
                   this.updateView();
               } else {
                   var dates = this.ranges[label];
-                  this.container.find('input[name=daterangepicker_start]').val(dates[0].format(this.locale.format));
+                  this.container.find('input[name=qlik-daterangepicker_start]').val(dates[0].format(this.locale.format));
   
                   if (this.endDate) {
-                      this.container.find('input[name=daterangepicker_end]').val(dates[1].format(this.locale.format));
+                      this.container.find('input[name=qlik-daterangepicker_end]').val(dates[1].format(this.locale.format));
                   }
               }
               
@@ -1194,7 +1194,7 @@
   
           hoverDate: function(e) {
               //ignore mouse movements while an above-calendar text input has focus
-              if (this.container.find('input[name=daterangepicker_start]').is(":focus") || this.container.find('input[name=daterangepicker_end]').is(":focus"))
+              if (this.container.find('input[name=qlik-daterangepicker_start]').is(":focus") || this.container.find('input[name=qlik-daterangepicker_end]').is(":focus"))
                   return;
   
               //ignore dates that can't be selected
@@ -1208,9 +1208,9 @@
               var date = cal.hasClass('dpleft') ? this.leftCalendar.calendar[row][col] : this.rightCalendar.calendar[row][col];
   
               if (this.endDate) {
-                  this.container.find('input[name=daterangepicker_start]').val(date.format(this.locale.format));
+                  this.container.find('input[name=qlik-daterangepicker_start]').val(date.format(this.locale.format));
               } else {
-                  this.container.find('input[name=daterangepicker_end]').val(date.format(this.locale.format));
+                  this.container.find('input[name=qlik-daterangepicker_end]').val(date.format(this.locale.format));
               }
   
               //highlight the dates between the start date and the date being hovered as a potential end date
@@ -1312,7 +1312,7 @@
               // or we hide the date picker when clicking outside to cancel
               this.applyClicked = true;
               this.hide();
-              this.element.trigger('apply.daterangepicker', this);
+              this.element.trigger('apply.qlik-daterangepicker', this);
           },
   
           clickCancel: function(e) {
@@ -1320,7 +1320,7 @@
               this.startDate = this.oldStartDate;
               this.endDate = this.oldEndDate;
               this.hide();
-              this.element.trigger('cancel.daterangepicker', this);
+              this.element.trigger('cancel.qlik-daterangepicker', this);
           },
   
           monthOrYearChanged: function(e) {
@@ -1410,13 +1410,12 @@
               //re-render the time pickers because changing one selection can affect what's enabled in another
               this.renderTimePicker('left');
               this.renderTimePicker('right');
-  
           },
   
           formInputsChanged: function(e) {
               var isRight = $(e.target).closest('.calendar').hasClass('dpright');
-              var start = moment(this.container.find('input[name="daterangepicker_start"]').val(), this.locale.format);
-              var end = moment(this.container.find('input[name="daterangepicker_end"]').val(), this.locale.format);
+              var start = moment(this.container.find('input[name=qlik-daterangepicker_start]').val(), this.locale.format);
+              var end = moment(this.container.find('input[name=qlik-daterangepicker_end]').val(), this.locale.format);
   
               if (start.isValid() && end.isValid()) {
   
@@ -1427,9 +1426,9 @@
                   this.setEndDate(end);
   
                   if (isRight) {
-                      this.container.find('input[name="daterangepicker_start"]').val(this.startDate.format(this.locale.format));
+                      this.container.find('input[name=qlik-daterangepicker_start]').val(this.startDate.format(this.locale.format));
                   } else {
-                      this.container.find('input[name="daterangepicker_end"]').val(this.endDate.format(this.locale.format));
+                      this.container.find('input[name=qlik-daterangepicker_end]').val(this.endDate.format(this.locale.format));
                   }
   
               }
@@ -1486,18 +1485,18 @@
   
           remove: function() {
               this.container.remove();
-              this.element.off('.daterangepicker');
+              this.element.off('.qlik-daterangepicker');
               this.element.removeData();
           }
   
       };
   
-      $.fn.daterangepicker = function(options, callback) {
+      $.fn.qlikdaterangepicker = function(options, callback) {
           this.each(function() {
               var el = $(this);
-              if (el.data('daterangepicker'))
-                  el.data('daterangepicker').remove();
-              el.data('daterangepicker', new DateRangePicker(el, options, callback));
+              if (el.data('qlik-daterangepicker'))
+                  el.data('qlik-daterangepicker').remove();
+              el.data('qlik-daterangepicker', new DateRangePicker(el, options, callback));
           });
           return this;
       };

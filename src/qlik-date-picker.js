@@ -185,7 +185,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
                     config.ranges = createRanges(layout.props);
                 }
 
-                $element.find('.show-range').daterangepicker(config, function (pickStart, pickEnd, label) {
+                $element.find('.show-range').qlikdaterangepicker(config, function (pickStart, pickEnd, label) {
                     if (!noSelections && pickStart.isValid() && pickEnd.isValid()) {
                         var pickStartString = moment.utc(pickStart.format("YYYYMMDD").toString(), 'YYYYMMDD').format(qlikDateFormat);
                         var pickEndString = moment.utc(pickEnd.format("YYYYMMDD").toString(), 'YYYYMMDD').format(qlikDateFormat);
