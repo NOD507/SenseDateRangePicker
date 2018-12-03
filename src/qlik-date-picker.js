@@ -34,7 +34,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
             ranges[props.lastMonth] = [moment().subtract(1, 'month').startOf('month').startOf('day'), moment().subtract(1, 'month').endOf('month').startOf('day')];
             return ranges;
         }
-        function createDateStates(pages) {
+        function createDateStates(pages, sortAscending) {
             var dateStates = {};
             pages.forEach(function (page) {
                 page.qMatrix.forEach(function (row) {
@@ -42,9 +42,13 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
                     dateStates[d] = row[0].qState;
                     //based on order numerically
                     if (row[0].qState === 'S') {
-                        dateStates.rangeEnd = dateStates.rangeEnd || row[0].qNum;
-                        dateStates.rangeStart = row[0].qNum;
-                        
+                        if(sortAscending) {
+                            dateStates.rangeStart = dateStates.rangeStart || row[0].qNum;
+                            dateStates.rangeEnd = row[0].qNum;
+                        } else {
+                            dateStates.rangeEnd = dateStates.rangeEnd || row[0].qNum;
+                            dateStates.rangeStart = row[0].qNum;
+                        }
                     }
                 });
             });
@@ -108,10 +112,16 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
                 var self = this;
                 var interactionState = this._interactionState;
                 var noSelections = this.options.noSelections === true;
+
+                // old sort order was ascending, check to see if the object was created before the change
+                // to calcuate the range start and end dates in the createDateStates
+                var sortAscending = layout && layout.qListObject && layout.qListObject.qSortCriterias &&
+                     layout.qListObject.qSortCriterias.qSortByNumeric == "1";
+
                 function canInteract() {
                     return interactionState === 1;
                 }
-                this.dateStates = createDateStates(layout.qListObject.qDataPages);
+                this.dateStates = createDateStates(layout.qListObject.qDataPages, sortAscending);
                 if (!self.app) {
                     self.app = qlik.currApp(this);
                 }
