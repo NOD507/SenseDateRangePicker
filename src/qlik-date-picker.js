@@ -42,8 +42,9 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
                     dateStates[d] = row[0].qState;
                     //based on order numerically
                     if (row[0].qState === 'S') {
-                        dateStates.rangeStart = dateStates.rangeStart || row[0].qNum;
-                        dateStates.rangeEnd = row[0].qNum;
+                        dateStates.rangeEnd = dateStates.rangeEnd || row[0].qNum;
+                        dateStates.rangeStart = row[0].qNum;
+                        
                     }
                 });
             });
