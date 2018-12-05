@@ -12,6 +12,9 @@ changed left and right rule names to prevent clash with sense client css */
   pointer-events:none;
   cursor:default;
 }
+.qv-mode-edit .qv-object-qlik-date-picker .qv-object-content-container div.requirements span {
+  text-align: center;
+}
 .qv-object-qlik-date-picker .show-range {
   background: #fff; 
   cursor: pointer; 
