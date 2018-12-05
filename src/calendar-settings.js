@@ -269,15 +269,25 @@ define(["qlik"], function (qlik) {
 				component: 'text'
 			}
 		}
+    };
+    var appearance = {
+		uses: "settings",
+		items: {
+			general: {
+				items: {
+					details: {
+						show: false
+					}
+				}
+			},
+		}
 	};
     return {
         type: "items",
         component: "accordion",
         items: {
             dimension: dimension,
-            settings: {
-                uses: "settings"
-            },
+            settings: appearance,
             CalSettings: CalendarSettings,
             about: about
         }
