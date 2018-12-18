@@ -631,10 +631,13 @@
               if (startDay > daysInLastMonth)
                   startDay -= 7;
   
-              if (dayOfWeek == this.locale.firstDay)
-                  startDay = daysInLastMonth - 6;
-  
-              var curDate = moment([lastYear, lastMonth, startDay, 12, minute, second]);
+              var curDate
+              if (dayOfWeek == this.locale.firstDay){
+                startDay = 1;
+                curDate = moment([year, month, startDay, 12, minute, second]);
+              } else {
+                curDate = moment([lastYear, lastMonth, startDay, 12, minute, second]);
+              }
   
               var col, row;
               for (var i = 0, col = 0, row = 0; i < 42; i++, col++, curDate = moment(curDate).add(24, 'hour')) {
