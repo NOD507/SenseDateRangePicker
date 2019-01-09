@@ -127,8 +127,9 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
                 }
 
                 //console.log('dateStates', this.dateStates);
-                var qlikDateFormat = layout.qListObject.qDimensionInfo.qNumFormat.qFmt,
-                    DateFormat = layout.props.format || qlikDateFormat;
+                var qlikDateFormat = layout.qListObject.qDimensionInfo.qNumFormat.qFmt
+                    || self.app.model.layout.qLocaleInfo.qDateFmt;
+                var outDateFormat = layout.props.format || qlikDateFormat;
                 moment.locale(layout.props.locale);
                 var minDate = createMoment(layout.props.minDate, qlikDateFormat);
                 var maxDate = createMoment(layout.props.maxDate, qlikDateFormat);
@@ -137,13 +138,13 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
 
                 $('#dropDown_' + layout.qInfo.qId).remove();
 
-                $element.html(createHtml(this.dateStates, DateFormat, layout.props));
+                $element.html(createHtml(this.dateStates, outDateFormat, layout.props));
 
                 var config = {
                     singleDatePicker: layout.props.isSingleDate,
                     preventSelections: noSelections,
                     "locale": {
-                        "format": DateFormat,
+                        "format": outDateFormat,
                         "separator": layout.props.separator
                     },
                     "parentEl": "#grid",
