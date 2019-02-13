@@ -3,7 +3,7 @@ version: 2
 defaults: &defaults
     working_directory: ~/qlik-date-picker
     docker:
-      - image: circleci/node:7
+      - image: circleci/node:stretch-browsers
     environment:
       GITHUB_ORG: "qlik-oss"
       GITHUB_REPO: "SenseDateRangePicker"
@@ -17,6 +17,14 @@ jobs:
       - run:
           name: Install dependencies
           command: npm install
+      - run:
+          name: BlackDuck scan
+          command: curl -s https://blackducksoftware.github.io/hub-detect/hub-detect.sh | bash -s -- \
+            --blackduck.url="https://qliktech.blackducksoftware.com" \
+            --blackduck.trust.cert=true \
+            --blackduck.username="svc-blackduck" \
+            --blackduck.password=${svc_blackduck} \
+            --detect.project.name="SenseDateRangePicker"
       - run:
           name: Build
           command: npm run build:zip
