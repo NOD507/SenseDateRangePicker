@@ -10,14 +10,11 @@ while read line; do
     if [[ $line =~ ^\"name\": ]]; then
         name=${line#*: \"}
         name=${name%\"*}
-    elif [[ $line =~ ^\"version\": ]]; then
-        version=${line#*: \"}
-        version=${version%\"*}
     fi
 done < package.json
 
 expected_file_count=$(($(find dist -type f | wc -l)-1))
-zip_file_count=$(zipinfo dist/${name}_${version}.zip | grep ^- | wc -l)
+zip_file_count=$(zipinfo dist/${name}_${VERSION}.zip | grep ^- | wc -l)
 
 if [ "${expected_file_count}" -ne "${zip_file_count}" ]; then
     # File count is incorrect

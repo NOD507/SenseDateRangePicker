@@ -1,17 +1,18 @@
 version: 2
 
 defaults: &defaults
-    working_directory: ~/qlik-date-picker
-    docker:
-      - image: circleci/node:stretch-browsers
-    environment:
-      GITHUB_ORG: "qlik-oss"
-      GITHUB_REPO: "SenseDateRangePicker"
-      PACKAGE_NAME: "qlik-date-picker"
+  working_directory: ~/qlik-date-picker
+  docker:
+    - image: circleci/node:stretch
+  environment:
+    GITHUB_ORG: "qlik-oss"
+    GITHUB_REPO: "SenseDateRangePicker"
+    PACKAGE_NAME: "qlik-date-picker"
 
 jobs:
-  build:
-    <<: *defaults
+  test:
+    docker:
+    - image: circleci/node:stretch-browsers
     steps:
       - checkout
       - run:
@@ -25,51 +26,85 @@ jobs:
             --blackduck.username="svc-blackduck" \
             --blackduck.password=${svc_blackduck} \
             --detect.project.name="SenseDateRangePicker"
+
+  bump-version:
+    <<: *defaults
+    steps:
+      - checkout
       - run:
-          name: Build
+          name: Bump version
           command: |
-            npm run build:zip
-            sudo chmod +x ./.circleci/verify-files.sh
-            ./.circleci/verify-files.sh
+            sudo chmod +x scripts/bump-version.sh
+            sudo chmod +x scripts/get-latest-version.sh
+            scripts/bump-version.sh $GITHUB_ORG $GITHUB_REPO
       - persist_to_workspace:
           root: ~/qlik-date-picker
           paths:
-            - dist
-  release:
+            - BUMPED_VERSION
+
+  build:
     <<: *defaults
     steps:
       - checkout
       - attach_workspace:
           at: ~/qlik-date-picker
       - run:
-          name: Install GHR
-          command: |
-            sudo chmod +x ./.circleci/install-ghr.sh
-            ./.circleci/install-ghr.sh
+          name: Install dependencies
+          command: npm install
       - run:
-          name: Create github release
+          name: Build and package
           command: |
-            sudo chmod +x ./.circleci/get-package-version.sh
-            export PACKAGE_VERSION=$(./.circleci/get-package-version.sh)
-            echo "Version: ${PACKAGE_VERSION}"
-            sudo chmod +x ./.circleci/create-release.sh
-            ./.circleci/create-release.sh $GITHUB_ORG $GITHUB_REPO $PACKAGE_NAME $PACKAGE_VERSION
+            sudo chmod +x scripts/get-bumped-version.sh
+            export VERSION=$(scripts/get-bumped-version.sh)
+            echo "Version: $VERSION"
+            npm run build:zip
+            sudo chmod +x scripts/verify-files.sh
+            scripts/verify-files.sh
+          environment:
+            NODE_ENV: production
+      - persist_to_workspace:
+          root: ~/qlik-date-picker
+          paths:
+            - dist
+      - store_artifacts:
+          path: dist
+          destination: dist
+
+  deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/qlik-date-picker
+      - run:
+          name: Install ghr
+          command: |
+            sudo chmod +x scripts/install-ghr.sh
+            scripts/install-ghr.sh
+      - run:
+          name: Create GitHub Release
+          command: |
+            sudo chmod +x scripts/get-bumped-version.sh
+            export VERSION=$(scripts/get-bumped-version.sh)
+            echo "Version: $VERSION"
+            sudo chmod +x scripts/create-release.sh
+            scripts/create-release.sh $GITHUB_ORG $GITHUB_REPO $PACKAGE_NAME $VERSION
 
 workflows:
   version: 2
-  build-release:
+  master_flow:
     jobs:
+      - test
+      - bump-version:
+          requires:
+            - test
       - build:
-          filters:
-            tags:
-              only:
-                - /v.*/
-      - release:
+          requires:
+            - bump-version
+      - deploy:
           requires:
             - build
           filters:
             branches:
-              ignore: /.*/
-            tags:
               only:
-                - /v.*/
+                - qlik-date-picker
