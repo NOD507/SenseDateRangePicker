@@ -15,7 +15,7 @@ gulp.task('qext', function () {
 	var qext = {
 		name: 'Date picker',
 		type: 'visualization',
-		description: pkg.description,
+		description: pkg.description + '\nVersion: ' + VERSION,
 		version: VERSION,
 		icon: 'calendar',
 		preview: 'preview.png',
