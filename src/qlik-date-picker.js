@@ -150,7 +150,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
                     "parentEl": "#grid",
                     "autoUpdateInput": false,
                     "autoApply": true,
-                    "opens": $element.offset().left < 500 ? "right" : "left",
+                    "opens": $element.offset().right < 500 ? "left" : "right",
                     "id": layout.qInfo.qId,
                     getClass: function (date) {
                         var d = date.format('YYYYMMDD');
