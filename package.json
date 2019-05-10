@@ -20,7 +20,7 @@
         "babel-core": "^6.26.3",
         "babel-plugin-istanbul": "^4.1.6",
         "del": "^2.0.2",
-        "gulp": "^3.9.0",
+        "gulp": "4.0.0",
         "gulp-cssnano": "^2.1.0",
         "gulp-dest": "^0.2.3",
         "gulp-ignore": "^2.0.1",
