@@ -104,8 +104,8 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
             importProperties: null,
             definition: CalendarSettings,
             support: {
-                snapshot: true,
-                export: true,
+                snapshot: false,
+                export: false,
                 exportData: false
             },
             paint: function ($element, layout) {
