@@ -1,38 +1,19 @@
 # SenseDateRangePicker
-A calendar object that allows a user to make selections in a date field. This extension is a part of dashboard bundle, first delivered with Qlik Sense November 2018.
+This extension is part of the extension bundles for Qlik Sense. The repository is maintained and moderated by Qlik RD.
 
-Based on http://www.daterangepicker.com/
+Feel free to fork and suggest pull requests for improvements and bug fixes. Changes will be moderated and reviewed before inclusion in future bundle versions. Please note that emphasis is on backward compatibility, i.e. breaking changes will most likely not be approved.
 
-# Get Started
-
-## Installation
-1. Download the extension zip, `qlik-date-picker.zip`, from the latest release (https://github.com/qlik-oss/SenseDateRangePicker/releases/latest)
-2. Install the extension:
-
-    a. **Qlik Sense Desktop**: unzip to a directory under [My Documents]/Qlik/Sense/Extensions.
-    
-    b. **Qlik Sense Server**: import the zip file in the QMC.
+Usage documentation for the extension is available at https://help.qlik.com.
 
 # Developing the extension
-
 If you want to do code changes to the extension follow these simple steps to get going.
 
 1. Get Qlik Sense Desktop
-1. Create a new app and add qsVariable to a sheet.
+1. Create a new app and add Date picker to a sheet.
 2. Clone the repository
 3. Run `npm install`
-4. Change the path to `/dist` folder in `gulpfile.js(row 8)` to be your local extensions folder. It will be something like `C:/Users/<user>/Documents/Qlik/Sense/Extensions/qlik-date-picker`.
-5. Run `npm run build:debug` - this command should output unminified code to the path configured in step four.
-
-```
-// Minified output to /dist folder.
-$ npm run build
-```
-
-```
-// Outputs a .zip file to /dist folder.
-$ npm run build:zip
-```
+4. Run `npm run build` - to build a dev-version to the /dist folder.
+5. Move the content of the /dist folder to the extension directory. Usually in `C:/Users/<user>/Documents/Qlik/Sense/Extensions/qlik-date-picker`.
 
 # Original Author
 [NOD507](https://github.com/NOD507)
