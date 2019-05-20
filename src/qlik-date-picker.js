@@ -71,6 +71,17 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
             html += '</div>';
             return html;
         }
+        function getPosition( element ) {
+            if (element.offset().left < 500) {
+                return "right";
+            }
+            else if (element.offset().right < 500) {
+                return "left";
+            }
+            else {
+                "right";
+            }
+        }
         return {
             methods: { //for testability
                 createDate: createDate,
@@ -150,7 +161,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
                     "parentEl": "#grid",
                     "autoUpdateInput": false,
                     "autoApply": true,
-                    "opens": $element.offset().right < 500 ? "left" : "right",
+                    "opens": getPosition($element),
                     "id": layout.qInfo.qId,
                     getClass: function (date) {
                         var d = date.format('YYYYMMDD');
