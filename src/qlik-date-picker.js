@@ -72,14 +72,14 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
             return html;
         }
         function getPosition( element ) {
-            if (element.offset().left < 500) {
+            if (element.offset().left < 600) {
                 return "right";
             }
-            else if (element.offset().right < 500) {
+            else if (element.offset().right < 600) {
                 return "left";
             }
             else {
-                "right";
+                "left";
             }
         }
         return {
