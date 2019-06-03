@@ -3,7 +3,7 @@ version: 2
 defaults: &defaults
   working_directory: ~/qlik-date-picker
   docker:
-    - image: circleci/node:stretch
+    - image: circleci/node:11.15.0
   environment:
     GITHUB_ORG: "qlik-oss"
     GITHUB_REPO: "SenseDateRangePicker"
