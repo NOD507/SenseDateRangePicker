@@ -18,12 +18,6 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
             }
             return moment.utc(createDate(str), 'YYYYMMDD');
         }
-        function getFieldName(str) {
-            if (str[0] === '=') {
-                str = str.substr(1);
-            }
-            return str;
-        }
         function createRanges(props) {
             var ranges = {};
             ranges[props.today] = [moment().startOf('day'), moment().startOf('day')];
@@ -75,7 +69,6 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
             methods: { //for testability
                 createDate: createDate,
                 createMoment: createMoment,
-                getFieldName: getFieldName,
                 createRanges: createRanges,
                 createDateStates: createDateStates,
                 createHtml:createHtml
@@ -189,10 +182,36 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
                 if (canInteract()) {
                     $element.find('.show-range').qlikdaterangepicker(config, function (pickStart, pickEnd, label) {
                         if (!noSelections && pickStart.isValid() && pickEnd.isValid()) {
-                            var pickStartString = moment.utc(pickStart.format("YYYYMMDD").toString(), 'YYYYMMDD').format(qlikDateFormat);
-                            var pickEndString = moment.utc(pickEnd.format("YYYYMMDD").toString(), 'YYYYMMDD').format(qlikDateFormat);
-                            self.app.field(getFieldName(layout.qListObject.qDimensionInfo.qGroupFieldDefs[0]), layout.qListObject.qStateName).
-                                selectMatch(">=" + pickStartString + "<=" + pickEndString);
+                            var dateBinarySearch = function(seachDate, lowIndex, highIndex) {
+                                if (lowIndex === highIndex) {
+                                    return lowIndex;
+                                }
+
+                                var middleIndex = lowIndex + Math.ceil((highIndex - lowIndex) / 2);
+                                var middleDate = moment.utc(
+                                    layout.qListObject.qDataPages[0].qMatrix[middleIndex][0].qText,
+                                    qlikDateFormat);
+
+                                // The matrix stores the dates from latest to earliest, so if the
+                                // sought date is after the middle date, pick the lower index span
+                                if (seachDate.isAfter(middleDate)) {
+                                    return dateBinarySearch(seachDate, lowIndex, middleIndex - 1);
+                                }
+                                return dateBinarySearch(seachDate, middleIndex, highIndex);
+                            };
+
+                            var lastIndex = layout.qListObject.qDataPages[0].qMatrix.length - 1;
+                            // Elements are stored in reverse order, so pick out index of end first
+                            var lowIndex = dateBinarySearch(pickEnd.startOf('day'), 0, lastIndex);
+                            // Index of start is guaranteed to be >= index of end
+                            var highIndex = dateBinarySearch(pickStart, lowIndex, lastIndex);
+
+                            var qElemNumbers = layout.qListObject.qDataPages[0].qMatrix
+                                .slice(lowIndex, highIndex + 1).map(function (fieldValue) {
+                                return fieldValue[0].qElemNumber;
+                            });
+
+                            self.backendApi.selectValues(0, qElemNumbers, false);
                         }
                     });
                 }
