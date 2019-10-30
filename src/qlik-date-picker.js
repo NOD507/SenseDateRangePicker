@@ -199,7 +199,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
                                 }
 
                                 var middleIndex = lowIndex + Math.ceil((highIndex - lowIndex) / 2);
-                                var middleDate = moment.utc(
+                                var middleDate = createMoment(
                                     layout.qListObject.qDataPages[0].qMatrix[middleIndex][0].qText,
                                     qlikDateFormat);
 
