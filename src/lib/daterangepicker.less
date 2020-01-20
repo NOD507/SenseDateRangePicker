@@ -9,6 +9,10 @@
 /* Nodier 
 changed left and right rule names to prevent clash with sense client css */
 
+#grid .qv-gridcell.zoom, .sheet-list #grid .qv-gridcell.zoom {
+  z-index: 5000!important;
+}
+
 .qv-mode-edit .qv-object-qlik-date-picker .qv-object-content-container {
   div.requirements span {
     text-align: center;
@@ -119,7 +123,9 @@ changed left and right rule names to prevent clash with sense client css */
 
   &.dropdown-menu {
     max-width: none;
-    z-index: 3001;
+    height: 285px;
+    overflow: auto;
+    z-index: 5000!important;
   }
 
   &.single .ranges, &.single .calendar {
