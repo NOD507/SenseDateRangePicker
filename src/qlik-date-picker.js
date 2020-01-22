@@ -193,6 +193,11 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
                 if (canInteract()) {
                     $element.find('.show-range').qlikdaterangepicker(config, function (pickStart, pickEnd, label) {
                         if (!noSelections && pickStart.isValid() && pickEnd.isValid()) {
+                            var pickStartString = moment.utc(pickStart.format("YYYYMMDD").toString(), "YYYYMMDD").format(qlikDateFormat),
+                            pickEndString = moment.utc(pickEnd.format("YYYYMMDD").toString(), "YYYYMMDD").format(qlikDateFormat),
+                            startDate = createMoment(pickStartString, qlikDateFormat),
+                            endDate = createMoment(pickEndString, qlikDateFormat);
+
                             var dateBinarySearch = function(seachDate, lowIndex, highIndex) {
                                 if (lowIndex === highIndex) {
                                     return lowIndex;
@@ -213,9 +218,9 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
 
                             var lastIndex = layout.qListObject.qDataPages[0].qMatrix.length - 1;
                             // Elements are stored in reverse order, so pick out index of end first
-                            var lowIndex = dateBinarySearch(pickEnd.startOf('day'), 0, lastIndex);
+                            var lowIndex = dateBinarySearch(endDate, 0, lastIndex);
                             // Index of start is guaranteed to be >= index of end
-                            var highIndex = dateBinarySearch(pickStart, lowIndex, lastIndex);
+                            var highIndex = dateBinarySearch(startDate, lowIndex, lastIndex);
 
                             var qElemNumbers = layout.qListObject.qDataPages[0].qMatrix
                                 .slice(lowIndex, highIndex + 1).map(function (fieldValue) {
