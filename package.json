@@ -13,12 +13,11 @@
         "test:unit": "aw chrome -c ./test/aw.config.js"
     },
     "devDependencies": {
-        "after-work.js": "4.3.2",
+        "@after-work.js/aw": "6.0.11",
         "angular": "1.7.2",
-        "babel": "^6.23.0",
-        "babel-cli": "^6.26.0",
-        "babel-core": "^6.26.3",
-        "babel-plugin-istanbul": "^4.1.6",
+        "@babel/cli": "7.8.4",
+        "@babel/core": "7.8.4",
+        "babel-plugin-istanbul": "6.0.0",
         "del": "^2.0.2",
         "gulp": "4.0.0",
         "gulp-cssnano": "^2.1.0",

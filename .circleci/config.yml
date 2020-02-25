@@ -17,7 +17,7 @@ jobs:
       - checkout
       - run:
           name: Install dependencies
-          command: npm install
+          command: yarn install
       - run:
           name: BlackDuck scan
           command: curl -s https://detect.synopsys.com/detect.sh | bash -s -- \
@@ -50,7 +50,7 @@ jobs:
           at: ~/qlik-date-picker
       - run:
           name: Install dependencies
-          command: npm install
+          command: yarn install
       - run:
           name: Build and package
           command: |
