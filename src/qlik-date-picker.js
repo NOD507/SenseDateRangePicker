@@ -193,21 +193,29 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
                 if (canInteract()) {
                     $element.find('.show-range').qlikdaterangepicker(config, function (pickStart, pickEnd, label) {
                         if (!noSelections && pickStart.isValid() && pickEnd.isValid()) {
-                            var pickStartString = moment.utc(pickStart.format("YYYYMMDD").toString(), "YYYYMMDD").format(qlikDateFormat),
-                            pickEndString = moment.utc(pickEnd.format("YYYYMMDD").toString(), "YYYYMMDD").format(qlikDateFormat),
-                            startDate = createMoment(pickStartString, qlikDateFormat),
-                            endDate = createMoment(pickEndString, qlikDateFormat);
-
+                            
+                            var pickStartString, pickEndString;                            
+                            // The conversion to UTC below doesn't work correctly for Timestamp, 
+                            // so checking the format which is '###0' for timestamps and doing different conversion formats.
+                            if (!qlikDateFormat.includes('#')) { 
+                                //To support various time zones, converting dates to a UTC format so they can be compared correctly.
+                                pickStartString = moment.utc(pickStart.format("YYYYMMDD").toString(), "YYYYMMDD").format(qlikDateFormat),
+                                pickEndString = moment.utc(pickEnd.format("YYYYMMDD").toString(), "YYYYMMDD").format(qlikDateFormat),
+                                pickStart = createMoment(pickStartString, qlikDateFormat),
+                                pickEnd = createMoment(pickEndString, qlikDateFormat);
+                            } else {
+                                // Handling timestamp case separately
+                                pickStart = moment.utc(pickStart.format("YYYYMMDD").toString(), "YYYYMMDD"),
+                                pickEnd = moment.utc(pickEnd.format("YYYYMMDD").toString(), "YYYYMMDD");
+                            }
                             var dateBinarySearch = function(seachDate, lowIndex, highIndex) {
                                 if (lowIndex === highIndex) {
                                     return lowIndex;
                                 }
-
-                                var middleIndex = lowIndex + Math.ceil((highIndex - lowIndex) / 2);
+                                var middleIndex = lowIndex + Math.ceil((highIndex - lowIndex) / 2);                                
                                 var middleDate = createMoment(
                                     layout.qListObject.qDataPages[0].qMatrix[middleIndex][0].qText,
-                                    qlikDateFormat);
-
+                                    qlikDateFormat);                               
                                 // The matrix stores the dates from latest to earliest, so if the
                                 // sought date is after the middle date, pick the lower index span
                                 if (seachDate.isAfter(middleDate)) {
@@ -218,9 +226,9 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
 
                             var lastIndex = layout.qListObject.qDataPages[0].qMatrix.length - 1;
                             // Elements are stored in reverse order, so pick out index of end first
-                            var lowIndex = dateBinarySearch(endDate, 0, lastIndex);
+                            var lowIndex = dateBinarySearch(pickEnd, 0, lastIndex);
                             // Index of start is guaranteed to be >= index of end
-                            var highIndex = dateBinarySearch(startDate, lowIndex, lastIndex);
+                            var highIndex = dateBinarySearch(pickStart, lowIndex, lastIndex);
 
                             var qElemNumbers = layout.qListObject.qDataPages[0].qMatrix
                                 .slice(lowIndex, highIndex + 1).map(function (fieldValue) {
