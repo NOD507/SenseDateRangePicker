@@ -5,7 +5,7 @@
  * Copyrights licensed under the terms of the MIT license.
  * Original source <https://github.com/NOD507/SenseDateRangePicker>
  */
-define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/daterangepicker.css", "./lib/daterangepicker"
+define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/daterangepicker.css", "./lib/daterangepicker", "./lib/encoder"
 ],
     function (qlik, $, moment, CalendarSettings) {
         'use strict';
@@ -58,7 +58,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
                     html += props.separator + createMoment(dateStates.rangeEnd).format(DateFormat);
                 }
             } else {
-                html += props.defaultText;
+                html += encoder.encodeForHTML(props.defaultText);
             }
             html += '</span> <b class="lui-button__caret lui-caret"></b>';
             html += '</div>';
