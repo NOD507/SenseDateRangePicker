@@ -25,7 +25,7 @@
         "gulp-ignore": "^2.0.1",
         "gulp-less": "^3.0.3",
         "gulp-replace": "^0.5.4",
-        "gulp-uglify": "^3.0.1",
+        "gulp-terser": "1.2.0",
         "gulp-util": "^3.0.7",
         "gulp-zip": "^3.0.2",
         "jquery": "^3.3.1",

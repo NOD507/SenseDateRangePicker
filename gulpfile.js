@@ -2,7 +2,7 @@
 var gulp = require('gulp');
 var cssnano = require('gulp-cssnano');
 var gutil = require('gulp-util');
-var uglify = require('gulp-uglify');
+const terser = require('gulp-terser');
 var saveLicense = require('uglify-save-license');
 var pkg = require('./package.json');
 var zip = require('gulp-zip');
@@ -77,7 +77,7 @@ gulp.task('add-assets', function () {
 
 gulp.task('add-src', function () {
 	return gulp.src(SRC + '/**/*.js')
-		.pipe(uglify({
+		.pipe(terser({
 			mangle: false,
 			output: {
 				comments: saveLicense
