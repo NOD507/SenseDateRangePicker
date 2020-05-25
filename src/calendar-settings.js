@@ -25,7 +25,6 @@ define(["qlik"], function (qlik) {
     var dimension = {
         type: "items",
         label: "Field",
-        ref: "qListObjectDef",
         min: 1,
         max: 1,
         items: {

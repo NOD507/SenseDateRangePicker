@@ -48,21 +48,33 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
             });
             return dateStates;
         }
+        function isEmpty(obj) {
+            for(var key in obj) {
+                if(obj.hasOwnProperty(key))
+                    return false;
+            }
+            return true;
+        }
         function createHtml(dateStates, DateFormat, props) {
             var html = '<div>'
-            html += '<div class="bootstrap_inside pull-right show-range" >';
-            html += '   <i class="lui-icon lui-icon--calendar"></i>&nbsp;<span>';
-            if (dateStates.rangeStart) {
-                html += createMoment(dateStates.rangeStart).format(DateFormat);
-                if (dateStates.rangeEnd && (dateStates.rangeEnd !== dateStates.rangeStart)) {
-                    html += props.separator + createMoment(dateStates.rangeEnd).format(DateFormat);
-                }
-            } else {
+            if( !isEmpty (dateStates) ) {                
+                html += '<div class="bootstrap_inside pull-right show-range" >';
+                html += '   <i class="lui-icon lui-icon--calendar"></i>&nbsp;<span>';
+                if (dateStates.rangeStart) {
+                    html += createMoment(dateStates.rangeStart).format(DateFormat);
+                    if (dateStates.rangeEnd && (dateStates.rangeEnd !== dateStates.rangeStart)) {
+                        html += props.separator + createMoment(dateStates.rangeEnd).format(DateFormat);
+                    }
+                } else {
                 html += encoder.encodeForHTML(props.defaultText);
+                }
+                html += '</span> <b class="lui-button__caret lui-caret"></b>';
+                html += '</div>';
+                html += '</div>';
+            } else {
+                html += '   <i class="lui-icon lui-icon--calendar"></i>&nbsp;&nbsp;&nbsp;<span>';
+                html += 'Add Date Field'
             }
-            html += '</span> <b class="lui-button__caret lui-caret"></b>';
-            html += '</div>';
-            html += '</div>';
             return html;
         }
         function getPosition( element ) {
