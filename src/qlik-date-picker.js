@@ -69,12 +69,12 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
                 html += encoder.encodeForHTML(props.defaultText);
                 }
                 html += '</span> <b class="lui-button__caret lui-caret"></b>';
-                html += '</div>';
-                html += '</div>';
+                html += '</div>';               
             } else {
                 html += '   <i class="lui-icon lui-icon--calendar"></i>&nbsp;&nbsp;&nbsp;<span>';
-                html += 'Add Date Field'
+                html += 'Add Date Field' + '</span>';
             }
+            html += '</div>';
             return html;
         }
         function getPosition( element ) {
