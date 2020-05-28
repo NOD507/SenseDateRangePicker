@@ -28,34 +28,40 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
             ranges[props.lastMonth] = [moment().subtract(1, 'month').startOf('month').startOf('day'), moment().subtract(1, 'month').endOf('month').startOf('day')];
             return ranges;
         }
-        function createDateStates(pages, sortAscending) {
+        function createDateStates(pages) {
             var dateStates = {};
             pages.forEach(function (page) {
                 page.qMatrix.forEach(function (row) {
                     var d = createDate(row[0].qNum);
                     dateStates[d] = row[0].qState;
                     //based on order numerically
-                    if (row[0].qState === 'S') {
-                        if(sortAscending) {
-                            dateStates.rangeStart = dateStates.rangeStart || row[0].qNum;
-                            dateStates.rangeEnd = row[0].qNum;
-                        } else {
-                            dateStates.rangeEnd = dateStates.rangeEnd || row[0].qNum;
-                            dateStates.rangeStart = row[0].qNum;
-                        }
+                    if (row[0].qState === 'S') {                        
+                        dateStates.rangeEnd = dateStates.rangeEnd || row[0].qNum;
+                        dateStates.rangeStart = row[0].qNum;                        
                     }
                 });
             });
             return dateStates;
         }
-        function createHtml(dateStates, DateFormat, props) {
+        function createHtml(dateStates, DateFormat, props, sortAscending) {
+            var startRange, endRange;
             var html = '<div>'
             html += '<div class="bootstrap_inside pull-right show-range" >';
             html += '   <i class="lui-icon lui-icon--calendar"></i>&nbsp;<span>';
             if (dateStates.rangeStart) {
-                html += createMoment(dateStates.rangeStart).format(DateFormat);
-                if (dateStates.rangeEnd && (dateStates.rangeEnd !== dateStates.rangeStart)) {
-                    html += props.separator + createMoment(dateStates.rangeEnd).format(DateFormat);
+                startRange = createMoment(dateStates.rangeStart).format(DateFormat);
+                endRange = (dateStates.rangeEnd && (dateStates.rangeEnd !== dateStates.rangeStart)) ? createMoment(dateStates.rangeEnd).format(DateFormat) : null;
+                if( !sortAscending ) {
+                    html += startRange;
+                    if (endRange !== null) {
+                        html += props.separator += endRange;
+                    }
+                } else {
+                    if( endRange!== null) {
+                        html += endRange += props.separator += startRange;
+                    } else {
+                        html += startRange;
+                    }
                 }
             } else {
                 html += encoder.encodeForHTML(props.defaultText);
@@ -125,7 +131,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
                 function canInteract() {
                     return interactionState === 1;
                 }
-                this.dateStates = createDateStates(layout.qListObject.qDataPages, sortAscending);
+                this.dateStates = createDateStates(layout.qListObject.qDataPages);
                 if (!self.app) {
                     self.app = qlik.currApp(this);
                 }
@@ -142,7 +148,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
 
                 $('#dropDown_' + layout.qInfo.qId).remove();
 
-                $element.html(createHtml(this.dateStates, outDateFormat, layout.props));
+                $element.html(createHtml(this.dateStates, outDateFormat, layout.props, sortAscending));
 
                 var config = {
                     singleDatePicker: layout.props.isSingleDate,
@@ -194,7 +200,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
                     $element.find('.show-range').qlikdaterangepicker(config, function (pickStart, pickEnd, label) {
                         if (!noSelections && pickStart.isValid() && pickEnd.isValid()) {
                             
-                            var pickStartString, pickEndString;                            
+                            var pickStartString, pickEndString,lastIndex, lowIndex, highIndex, qElemNumbers;                            
                             // The conversion to UTC below doesn't work correctly for Timestamp, 
                             // so checking the format which is '###0' for timestamps and doing different conversion formats.
                             if (!qlikDateFormat.includes('#')) { 
@@ -215,26 +221,44 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
                                 var middleIndex = lowIndex + Math.ceil((highIndex - lowIndex) / 2);                                
                                 var middleDate = createMoment(
                                     layout.qListObject.qDataPages[0].qMatrix[middleIndex][0].qText,
-                                    qlikDateFormat);                               
-                                // The matrix stores the dates from latest to earliest, so if the
+                                    qlikDateFormat);    
+                                // If the date object is created prior to September 2019, the order 
+                                //of dates shall be ascending and needs to be handled separately
+                                if (sortAscending) {
+                                   if (seachDate.isBefore(middleDate)) {
+                                       return dateBinarySearch(seachDate, lowIndex, middleIndex - 1); 
+                                    }
+                                } 
+                                // From September 2019, The matrix stores the dates from latest to earliest, so if the
                                 // sought date is after the middle date, pick the lower index span
-                                if (seachDate.isAfter(middleDate)) {
-                                    return dateBinarySearch(seachDate, lowIndex, middleIndex - 1);
+                                else {                   
+                                   if (seachDate.isAfter(middleDate)) {
+                                       return dateBinarySearch(seachDate, lowIndex, middleIndex - 1);
+                                   }
                                 }
                                 return dateBinarySearch(seachDate, middleIndex, highIndex);
                             };
-
-                            var lastIndex = layout.qListObject.qDataPages[0].qMatrix.length - 1;
-                            // Elements are stored in reverse order, so pick out index of end first
-                            var lowIndex = dateBinarySearch(pickEnd, 0, lastIndex);
-                            // Index of start is guaranteed to be >= index of end
-                            var highIndex = dateBinarySearch(pickStart, lowIndex, lastIndex);
-
-                            var qElemNumbers = layout.qListObject.qDataPages[0].qMatrix
+                            if (sortAscending) {
+                                lastIndex = layout.qListObject.qDataPages[0].qMatrix.length - 1;
+                                // Elements are stored in ascending order, so pick out index of start first
+                                lowIndex = dateBinarySearch(pickStart, 0, lastIndex);
+                                // Index of end is guaranteed to be >= index of start
+                                highIndex = dateBinarySearch(pickEnd, lowIndex, lastIndex);
+                                qElemNumbers = layout.qListObject.qDataPages[0].qMatrix
                                 .slice(lowIndex, highIndex + 1).map(function (fieldValue) {
-                                return fieldValue[0].qElemNumber;
-                            });
-
+                                    return fieldValue[0].qElemNumber;
+                                });                            
+                            } else {
+                                lastIndex = layout.qListObject.qDataPages[0].qMatrix.length - 1;
+                                // Elements are stored in reverse order, so pick out index of end first
+                                lowIndex = dateBinarySearch(pickEnd, 0, lastIndex);
+                                // Index of start is guaranteed to be >= index of end
+                                highIndex = dateBinarySearch(pickStart, lowIndex, lastIndex);
+                                qElemNumbers = layout.qListObject.qDataPages[0].qMatrix
+                                .slice(lowIndex, highIndex + 1).map(function (fieldValue) {
+                                    return fieldValue[0].qElemNumber;
+                                });
+                            }
                             self.backendApi.selectValues(0, qElemNumbers, false);
                         }
                     });
