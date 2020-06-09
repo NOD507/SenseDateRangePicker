@@ -43,31 +43,42 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
             });
             return dateStates;
         }
+        function isEmpty(obj) {
+            for(var key in obj) {
+                if(obj.hasOwnProperty(key))
+                    return false;
+            }
+            return true;
+        }
         function createHtml(dateStates, DateFormat, props, sortAscending) {
-            var startRange, endRange;
-            var html = '<div>'
-            html += '<div class="bootstrap_inside pull-right show-range" >';
-            html += '   <i class="lui-icon lui-icon--calendar"></i>&nbsp;<span>';
-            if (dateStates.rangeStart) {
-                startRange = createMoment(dateStates.rangeStart).format(DateFormat);
-                endRange = (dateStates.rangeEnd && (dateStates.rangeEnd !== dateStates.rangeStart)) ? createMoment(dateStates.rangeEnd).format(DateFormat) : null;
+            var html = '<div>', startRange, endRange;
+            if( !isEmpty (dateStates) ) {                
+                html += '<div class="bootstrap_inside pull-right show-range" >';
+                html += '   <i class="lui-icon lui-icon--calendar"></i>&nbsp;<span>';
+                if (dateStates.rangeStart) {
+                    startRange = createMoment(dateStates.rangeStart).format(DateFormat);
+                    endRange = (dateStates.rangeEnd && (dateStates.rangeEnd !== dateStates.rangeStart)) ? createMoment(dateStates.rangeEnd).format(DateFormat) : null;
                 if( !sortAscending ) {
                     html += startRange;
                     if (endRange !== null) {
-                        html += props.separator += endRange;
+                        html += props.separator + endRange;
                     }
                 } else {
                     if( endRange!== null) {
-                        html += endRange += props.separator += startRange;
+                        html += endRange + props.separator + startRange;
                     } else {
                         html += startRange;
                     }
-                }
-            } else {
+                    }
+                } else {
                 html += encoder.encodeForHTML(props.defaultText);
+                }
+                html += '</span> <b class="lui-button__caret lui-caret"></b>';
+                html += '</div>';               
+            } else {
+                html += '   <i class="lui-icon lui-icon--calendar"></i>&nbsp;&nbsp;&nbsp;<span>';
+                html += 'Add Date Field' + '</span>';
             }
-            html += '</span> <b class="lui-button__caret lui-caret"></b>';
-            html += '</div>';
             html += '</div>';
             return html;
         }
