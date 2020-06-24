@@ -1,8 +1,7 @@
 define(["qlik"], function (qlik) {
-    var fieldList, fieldListPromise;
+    var fieldList, fieldListPromise;   
 
     function getPromise() {
-        if (!fieldListPromise) {
             fieldListPromise = qlik.currApp().createGenericObject({
                 qFieldListDef: {
                     qType: 'variable'
@@ -18,7 +17,6 @@ define(["qlik"], function (qlik) {
                 });
                 return fieldList;
             });
-        }
         return fieldListPromise;
     }
 
@@ -33,10 +31,7 @@ define(["qlik"], function (qlik) {
                 ref: "qListObjectDef.qDef.qFieldDefs.0",
                 label: "Date field",
                 component: 'dropdown',
-                options: function () {
-                    if (fieldList) {
-                        return fieldList;
-                    }
+                options: function () {                    
                     return getPromise();
                 },
                 show: function (data) {
