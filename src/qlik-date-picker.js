@@ -7,7 +7,7 @@
  */
 define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/daterangepicker.css", "./lib/daterangepicker", "./lib/encoder"
 ],
-    function (qlik, $, moment, CalendarSettings) {
+    function (qlik, $, moment, CalendarSettings, encoder) {
         'use strict';
         function createDate(num) {
             return moment((num - 25569) * 86400 * 1000).utc().format("YYYYMMDD").toString();

@@ -7,20 +7,18 @@
  * Since it no longer has any dependencies to jQuery it now called
  * <em>encoder</em>
  */
-encoder = {
+  function encodeForHtml(input) {
     /** 
-     * Encodes input for use in HTML context
-     */
-    encodeForHTML(input) {
-      if (typeof input === 'undefined' || input === null) {
-        return '';
-      }
-      let encoded = '',
-        encodingDiv = document.createElement('div');
-      const textNode = document.createTextNode(input);
-      encodingDiv.appendChild(textNode);
-      encoded = encodingDiv.innerHTML;
-      encodingDiv.removeChild(textNode);
-      return encoded;
+    * Encodes input for use in HTML context
+    */    
+    if (input === undefined) {
+      return '';
     }
-  };
+    let encoded = '',
+      encodingDiv = document.createElement('div');
+    const textNode = document.createTextNode(input);
+    encodingDiv.appendChild(textNode);
+    encoded = encodingDiv.innerHTML;
+    encodingDiv.removeChild(textNode);
+      return encoded;
+  }
