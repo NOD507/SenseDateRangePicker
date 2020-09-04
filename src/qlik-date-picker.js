@@ -5,7 +5,7 @@
  * Copyrights licensed under the terms of the MIT license.
  * Original source <https://github.com/NOD507/SenseDateRangePicker>
  */
-define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/daterangepicker.css", "./lib/daterangepicker", "./lib/encoder"
+define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/encoder","css!./lib/daterangepicker.css", "./lib/daterangepicker"
 ],
     function (qlik, $, moment, CalendarSettings, encoder) {
         'use strict';
