@@ -9,7 +9,7 @@
  */
 define([], function() {
   var encoder = {
-    encodeForHtml: function (input) {
+    encodeForHTML: function (input) {
       /** 
       * Encodes input for use in HTML context
       */    
