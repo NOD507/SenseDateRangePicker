@@ -214,7 +214,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
                             var pickStartString, pickEndString,lastIndex, lowIndex, highIndex, qElemNumbers;                            
                             // The conversion to UTC below doesn't work correctly for Timestamp, 
                             // so checking the format which is '###0' for timestamps and doing different conversion formats.
-                            if (!qlikDateFormat.includes('#')) { 
+                            if (qlikDateFormat.indexOf('#') === -1) { 
                                 //To support various time zones, converting dates to a UTC format so they can be compared correctly.
                                 pickStartString = moment.utc(pickStart.format("YYYYMMDD").toString(), "YYYYMMDD").format(qlikDateFormat),
                                 pickEndString = moment.utc(pickEnd.format("YYYYMMDD").toString(), "YYYYMMDD").format(qlikDateFormat),
