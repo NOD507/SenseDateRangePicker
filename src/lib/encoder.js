@@ -7,12 +7,13 @@
  * Since it no longer has any dependencies to jQuery it now called
  * <em>encoder</em>
  */
-encoder = {
-    /** 
-     * Encodes input for use in HTML context
-     */
-    encodeForHTML(input) {
-      if (typeof input === 'undefined' || input === null) {
+define([], function() {
+  var encoder = {
+    encodeForHTML: function (input) {
+      /** 
+      * Encodes input for use in HTML context
+      */    
+      if (input === undefined) {
         return '';
       }
       let encoded = '',
@@ -24,3 +25,5 @@ encoder = {
       return encoded;
     }
   };
+  return encoder;
+})

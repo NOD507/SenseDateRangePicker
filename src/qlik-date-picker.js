@@ -5,9 +5,9 @@
  * Copyrights licensed under the terms of the MIT license.
  * Original source <https://github.com/NOD507/SenseDateRangePicker>
  */
-define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/daterangepicker.css", "./lib/daterangepicker", "./lib/encoder"
+define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/encoder", "css!./lib/daterangepicker.css", "./lib/daterangepicker" 
 ],
-    function (qlik, $, moment, CalendarSettings) {
+    function (qlik, $, moment, CalendarSettings, encoder) {
         'use strict';
         function createDate(num) {
             return moment((num - 25569) * 86400 * 1000).utc().format("YYYYMMDD").toString();
@@ -214,7 +214,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "css!./lib/
                             var pickStartString, pickEndString,lastIndex, lowIndex, highIndex, qElemNumbers;                            
                             // The conversion to UTC below doesn't work correctly for Timestamp, 
                             // so checking the format which is '###0' for timestamps and doing different conversion formats.
-                            if (!qlikDateFormat.includes('#')) { 
+                            if (qlikDateFormat.indexOf('#') === -1) { 
                                 //To support various time zones, converting dates to a UTC format so they can be compared correctly.
                                 pickStartString = moment.utc(pickStart.format("YYYYMMDD").toString(), "YYYYMMDD").format(qlikDateFormat),
                                 pickEndString = moment.utc(pickEnd.format("YYYYMMDD").toString(), "YYYYMMDD").format(qlikDateFormat),
