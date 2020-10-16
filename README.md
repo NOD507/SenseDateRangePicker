@@ -15,5 +15,10 @@ If you want to do code changes to the extension follow these simple steps to get
 4. Run `npm run build` - to build a dev-version to the /dist folder.
 5. Move the content of the /dist folder to the extension directory. Usually in `C:/Users/<user>/Documents/Qlik/Sense/Extensions/qlik-date-picker`.
 
+## Release
+1. `git checkout master && git pull` to make sure you're up to date.
+2. `npm version <major/minor/patch>`
+3. `git push && git push --tags`
+
 # Original Author
 [NOD507](https://github.com/NOD507)
