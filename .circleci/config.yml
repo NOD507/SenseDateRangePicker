@@ -88,9 +88,9 @@ workflows:
             - build
             - blackduck
           filters:
+            tags:
+              only:
+                - /^v.*/
             branches:
               # Have to ignore branches to make the tags-filter work
               ignore: /.*/
-            tags:
-              only:
-                - /v.*/
