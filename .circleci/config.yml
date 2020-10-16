@@ -89,9 +89,8 @@ workflows:
             - blackduck
           filters:
             branches:
-              only:
-                - master
-                - /release\/.*/
+              # Have to ignore branches to make the tags-filter work
+              ignore: /.*/
             tags:
               only:
                 - /v.*/
