@@ -35,7 +35,7 @@ jobs:
       - store_artifacts:
           path: dist
           destination: dist
-  test:
+  blackduck:
     docker:
     - image: circleci/node:stretch-browsers
     steps:
@@ -75,12 +75,18 @@ workflows:
   version: 2
   master_flow:
     jobs:
-      - build
-      - test
+      - build:
+          filters: # Required since jobs that requires this uses tag-filter
+            tags:
+              only: /.*/
+      - balackduck:
+          filters: # Required since jobs that requires this uses tag-filter
+            tags:
+              only: /.*/
       - deploy:
           requires:
             - build
-            - test
+            - blackduck
           filters:
             branches:
               # Have to ignore branches to make the tags-filter work
