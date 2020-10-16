@@ -1,0 +1,464 @@
+/**
+* A stylesheet for use with Bootstrap 3.x
+* @author: Dan Grossman http://www.dangrossman.info/
+* @copyright: Copyright (c) 2012-2015 Dan Grossman. All rights reserved.
+* @license: Licensed under the MIT license. See http://www.opensource.org/licenses/mit-license.php
+* @website: https://www.improvely.com/
+*/
+
+/* Nodier 
+changed left and right rule names to prevent clash with sense client css */
+
+#grid .qv-gridcell.zoom, .sheet-list #grid .qv-gridcell.zoom {
+  z-index: 5000!important;
+}
+
+.qv-mode-edit .qv-object-qlik-date-picker .qv-object-content-container {
+  div.requirements span {
+    text-align: center;
+  }
+}
+
+.qv-object-qlik-date-picker {
+  .show-range {
+    background: #fff; 
+    cursor: pointer; 
+    padding: 0px 0px; 
+    border: 0px solid #ccc; 
+    display: inline;
+  }
+
+  .lui-icon--expand, .lui-icon--camera {
+    display: none;
+  }
+}
+
+/* Container Appearance */
+.qlik-daterangepicker {
+  position: absolute;
+  color: #595959;
+  background: #fff;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  border-color: gray;
+  width: 278px;
+  min-width: 250px;
+  margin: auto;
+  margin-top: 1px;
+  top: 100px;
+  left: 20px;
+  transition: opacity .2s ease-out;
+  opacity: 1;
+  z-index: 1021;
+  box-shadow: 0 1px 2px rgba(0,0,0,.4);
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Calendars */ 
+  &:before, &:after {
+    position: absolute;
+    display: inline-block;
+    border-bottom-color: rgba(0, 0, 0, 0.2);
+    content: '';
+  }
+  &:before {
+    top: -7px;
+    border-right: 7px solid transparent;
+    border-left: 7px solid transparent;
+    border-bottom: 7px solid #ccc;
+  }
+  &:after {
+    top: -6px;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #fff;
+    border-left: 6px solid transparent;
+  }
+
+  &.opensleft {
+    &:before {
+      right: 9px;
+    }
+    &:after {
+      right: 10px;
+    }
+  }
+
+  &.openscenter {
+    &:before, &:after {
+      left: 0;
+      right: 0;
+      width: 0;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  &.opensright {
+    &:before {
+      left: 44px;
+    }
+    &:after {
+      left: 45px;
+    }
+  }
+
+  &.dropup {
+    margin-top: -5px;
+
+    &:before {
+      top: initial;
+      bottom: -7px;
+      border-bottom: initial;
+      border-top: 7px solid #ccc;
+    }
+    &:after {
+      top: initial;
+      bottom: -6px;
+      border-bottom: initial;
+      border-top: 6px solid #fff;
+    }
+  }
+
+  &.dropdown-menu {
+    max-width: none;
+    height: 285px;
+    overflow: auto;
+    z-index: 5000!important;
+  }
+
+  &.single .ranges, &.single .calendar {
+    float: none;
+  }
+
+  &.show-calendar .calendar {
+    display: block;
+  }
+
+  .calendar {
+    display: none;
+    max-width: 270px;
+    margin: 8px;
+
+    &.single .calendar-table {
+      border: none;
+    }
+
+    th, td {
+      white-space: nowrap;
+      text-align: center;
+      min-width: 32px;
+    }
+
+    th {
+      opacity: 0.6;
+    }
+
+    &.active {
+      th {
+        opacity: 1;
+      }
+      .input-mini {
+        border: 1px solid #52a2cc;
+        transition: none;
+        box-shadow: 0 0 1px 1px rgba(82,162,204,.7)
+      }
+    }
+  }
+
+  .calendar-table {
+    border: 1px solid #fff;
+    padding: 4px;
+    border-radius: 4px;
+    background: #fff;
+  }
+
+  table {
+    width: 100%;
+    margin: 0; 
+    background-color: transparent;
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  td, th {
+    text-align: center;
+    width: 22px;
+    height: 22px;
+    padding: 5px;
+    white-space: nowrap;
+    cursor: pointer; 
+  }
+  td.available .btn:hover, th.available .btn:hover {
+    background-color: rgba(0,0,0,.05);
+  }
+  td.week, th.week {
+    font-size: 80%;
+    color: #ccc;
+  }
+  td.off, td.off.in-range, td.off.start-date, td.off.end-date {
+    background-color: #fff;
+    color: #999; 
+  }
+  th.month, th.next, th.prev {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  th.month {
+    width: auto; 
+  }
+  th.next, th.prev {
+    width: 35px; 
+    height:35px;
+    opacity: 1;
+  }
+  th.next.disabled, th.prev.disabled {
+    opacity: 0.6;
+    cursor:default;
+  }
+  td.disabled, option.disabled {
+    color: #999;
+    cursor: default;
+  }
+  td.available:hover{
+    background-color: rgba(0,0,0,.05); 
+  }
+  td.stateS, td.stateL {
+    background-color: rgb(117,214,117);
+    color: #fff;
+  }
+  td.available.stateS:hover, td.available.stateL:hover {
+    background-color: rgba(117,214,117,0.7);
+  }
+  &.in-selection td.stateS, td.stateA {
+    background-color: #dedede;
+  }
+  td.stateX {
+    background-color: #a8a8a8;
+  }
+  td.stateO {
+    background-color: #fff;
+  }
+  td.nodata, td.nodata:hover {
+    background-color: #fff;
+    color:#aaa;
+    cursor: default;
+  }
+  &.in-selection {
+    td.start-date, td.end-date, td.available:hover {
+      background-color: #51cc52;
+      box-shadow: inset 0px -2px 0px 0px rgba(0,0,0,0.1);
+      color: #fff;
+    }
+    td.in-range {
+      color: #fff;
+      background-color: #6bd36c;
+    }
+  }
+  td.start-date {
+    border-radius: 4px 0 0 4px;
+  }
+  td.end-date {
+    border-radius: 0 4px 4px 0;
+  }
+  td.start-date.end-date {
+    border-radius: 4px;
+  }
+  td.empty {
+    background-color: #fff;
+    color:#fff;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  select.monthselect, select.yearselect {
+    font-size: 12px;
+    padding: 1px;
+    height: auto;
+    margin: 0;
+    cursor: default;
+  }
+  select.monthselect {
+    margin-right: 2%;
+    width: 56%;
+  }
+  select.yearselect {
+    width: 40%;
+  }
+  select.hourselect, select.minuteselect, select.secondselect, select.ampmselect {
+    width: 50px;
+    margin-bottom: 0;
+  }
+
+  .input-mini {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #555;
+    height: 30px;
+    line-height: 30px;
+    display: block;
+    vertical-align: middle;
+    margin: 0 0 5px 0;
+    padding: 0 6px 0 28px;
+    width: 100%; 
+  }
+
+  .qlik-daterangepicker_input {
+    position: relative;
+    i {
+      position: absolute;
+      left: 8px;
+      top: 8px;
+    }
+  }
+
+  .calendar-time {
+    text-align: center;
+    margin: 5px auto;
+    line-height: 30px;
+    position: relative;
+    padding-left: 28px;
+    select.disabled {
+      color: #ccc;
+      cursor: default;
+    }
+  }
+
+  .ranges {
+    font-size: 11px;
+    background-color: rgb(250,250,250);
+    color: rgb(107,107,107);
+    float: none;
+    padding: 4px;
+    text-align: left;
+    .header {
+      font-size: 13px;
+      font-weight: bold;
+      margin-left: 8px;
+      margin-top: 4px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 12px;
+      padding-bottom: 8px;
+    }
+    li {
+      font-size: 13px;
+      font-weight: bold;
+      background: rgb(237,237,237);
+      border: 1px solid transparent;
+      border-radius: 4px;
+      color: rgb(101,101,101);
+      padding: 5px 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      &.disabled {
+        font-weight:normal;
+        background-color: transparent;
+        color: rgb(107,107,107);
+        pointer-events:none;
+        cursor:default;
+      }
+    }
+  }
+
+  .btn {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .btn-default {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+  }
+  .btn-xs{
+    padding: 1px 8px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+  }
+  .disabled .btn{
+    color: #aaa;
+    pointer-events: none;
+    cursor: default;
+  }
+
+  .hide{
+      display:none;
+  }
+}
+
+/*  Larger Screen Styling */
+@media (min-width: 564px) {
+  .qlik-daterangepicker {
+    width: auto;
+
+    .ranges, .calendar {
+      float: left;
+    }
+
+    .ranges ul {
+      width: 160px;
+    }
+
+    &.single {
+      .ranges, .calendar {
+        float: left;
+      }
+      .ranges ul {
+        width: 100%;
+      }
+      .calendar.dpleft {
+        clear: none;
+      }
+    }
+
+    .calendar {
+      &.dpleft {
+        clear: left;
+        margin-right: 0;
+        .calendar-table {
+          border-right: none;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          padding-right: 12px;
+        }
+      }
+      &.dpright {
+        margin-left: 0;
+        .calendar-table {
+          border-left: none;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+      }
+    }
+
+    .dpleft .qlik-daterangepicker_input {
+      padding-right: 12px;
+    }
+  }
+}
+
+@media (min-width: 730px) {
+  .qlik-daterangepicker {
+    .ranges {
+      width: auto;
+      float: left;
+    }
+
+    .calendar.dpleft {
+      clear: none;
+    }
+  }
+}

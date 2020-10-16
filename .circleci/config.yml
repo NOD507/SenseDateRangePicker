@@ -1,0 +1,110 @@
+version: 2
+
+defaults: &defaults
+  working_directory: ~/qlik-date-picker
+  docker:
+    - image: circleci/node:stretch
+  environment:
+    GITHUB_ORG: "qlik-oss"
+    GITHUB_REPO: "SenseDateRangePicker"
+    PACKAGE_NAME: "qlik-date-picker"
+
+jobs:
+  test:
+    docker:
+    - image: circleci/node:stretch-browsers
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - run:
+          name: BlackDuck scan
+          command: curl -s https://detect.synopsys.com/detect.sh | bash -s -- \
+            --blackduck.url="https://qliktech.blackducksoftware.com" \
+            --blackduck.trust.cert=true \
+            --blackduck.username="svc-blackduck" \
+            --blackduck.password=${svc_blackduck} \
+            --detect.project.name="SenseDateRangePicker"
+
+  bump-version:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Bump version
+          command: |
+            sudo chmod +x scripts/bump-version.sh
+            sudo chmod +x scripts/get-latest-version.sh
+            scripts/bump-version.sh $GITHUB_ORG $GITHUB_REPO
+      - persist_to_workspace:
+          root: ~/qlik-date-picker
+          paths:
+            - BUMPED_VERSION
+
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/qlik-date-picker
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - run:
+          name: Build and package
+          command: |
+            sudo chmod +x scripts/get-bumped-version.sh
+            export VERSION=$(scripts/get-bumped-version.sh)
+            echo "Version: $VERSION"
+            npm run build:zip
+            sudo chmod +x scripts/verify-files.sh
+            scripts/verify-files.sh
+          environment:
+            NODE_ENV: production
+      - persist_to_workspace:
+          root: ~/qlik-date-picker
+          paths:
+            - dist
+      - store_artifacts:
+          path: dist
+          destination: dist
+
+  deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/qlik-date-picker
+      - run:
+          name: Install ghr
+          command: |
+            sudo chmod +x scripts/install-ghr.sh
+            scripts/install-ghr.sh
+      - run:
+          name: Create GitHub Release
+          command: |
+            sudo chmod +x scripts/get-bumped-version.sh
+            export VERSION=$(scripts/get-bumped-version.sh)
+            echo "Version: $VERSION"
+            sudo chmod +x scripts/create-release.sh
+            scripts/create-release.sh $GITHUB_ORG $GITHUB_REPO $PACKAGE_NAME $VERSION
+
+workflows:
+  version: 2
+  master_flow:
+    jobs:
+      - test
+      - bump-version:
+          requires:
+            - test
+      - build:
+          requires:
+            - bump-version
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - qlik-date-picker
