@@ -10,38 +10,6 @@ defaults: &defaults
     PACKAGE_NAME: "qlik-date-picker"
 
 jobs:
-  test:
-    docker:
-    - image: circleci/node:stretch-browsers
-    steps:
-      - checkout
-      - run:
-          name: Install dependencies
-          command: yarn install
-      - run:
-          name: BlackDuck scan
-          command: curl -s https://detect.synopsys.com/detect.sh | bash -s -- \
-            --blackduck.url="https://qliktech.blackducksoftware.com" \
-            --blackduck.trust.cert=true \
-            --blackduck.username="svc-blackduck" \
-            --blackduck.password=${svc_blackduck} \
-            --detect.project.name="SenseDateRangePicker"
-
-#  bump-version:
-#    <<: *defaults
-#    steps:
-#      - checkout
-#      - run:
-#          name: Bump version
-#          command: |
-#            sudo chmod +x scripts/bump-version.sh
-#            sudo chmod +x scripts/get-latest-version.sh
-#            scripts/bump-version.sh $GITHUB_ORG $GITHUB_REPO
-#      - persist_to_workspace:
-#          root: ~/qlik-date-picker
-#          paths:
-#            - BUMPED_VERSION
-
   build:
     <<: *defaults
     steps:
@@ -69,7 +37,22 @@ jobs:
       - store_artifacts:
           path: dist
           destination: dist
-
+  test:
+    docker:
+    - image: circleci/node:stretch-browsers
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - run:
+          name: BlackDuck scan
+          command: curl -s https://detect.synopsys.com/detect.sh | bash -s -- \
+            --blackduck.url="https://qliktech.blackducksoftware.com" \
+            --blackduck.trust.cert=true \
+            --blackduck.username="svc-blackduck" \
+            --blackduck.password=${svc_blackduck} \
+            --detect.project.name="SenseDateRangePicker"
   deploy:
     <<: *defaults
     steps:
@@ -94,13 +77,10 @@ workflows:
   version: 2
   master_flow:
     jobs:
-      - build:
+      - build
       - test:
         requires:
             - build
-      #- bump-version:
-      #    requires:
-      #      - test
       - deploy:
           requires:
             - build
