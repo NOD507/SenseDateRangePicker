@@ -1,7 +1,12 @@
 #!/bin/bash
 set -o errexit
 
-echo "$(new JsonSlurper().parseText(new File('package.json').text).version)"
+echo "$(cat package.json \
+  | grep version \
+  | head -1 \
+  | awk -F: '{ print $2 }' \
+  | sed 's/[",]//g')"
 
 # Usage
 # $ get-bumped-version.sh
+
