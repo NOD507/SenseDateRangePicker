@@ -79,7 +79,7 @@ workflows:
           filters: # Required since jobs that requires this uses tag-filter
             tags:
               only: /.*/
-      - balackduck:
+      - blackduck:
           filters: # Required since jobs that requires this uses tag-filter
             tags:
               only: /.*/
