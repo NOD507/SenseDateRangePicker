@@ -78,9 +78,7 @@ workflows:
   master_flow:
     jobs:
       - build
-      - test:
-        requires:
-            - build
+      - test
       - deploy:
           requires:
             - build
