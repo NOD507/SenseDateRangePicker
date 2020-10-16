@@ -22,8 +22,8 @@ jobs:
       - run:
           name: Build and package
           command: |
-            sudo chmod +x scripts/get-bumped-version.sh
-            export VERSION=$(scripts/get-bumped-version.sh)
+            sudo chmod +x scripts/get-version.sh
+            export VERSION=$(scripts/get-version.sh)
             echo "Version: $VERSION"
             npm run build:zip
             sudo chmod +x scripts/verify-files.sh
@@ -67,8 +67,8 @@ jobs:
       - run:
           name: Create GitHub Release
           command: |
-            sudo chmod +x scripts/get-bumped-version.sh
-            export VERSION=$(scripts/get-bumped-version.sh)
+            sudo chmod +x scripts/get-version.sh
+            export VERSION=$(scripts/get-version.sh)
             echo "Version: $VERSION"
             sudo chmod +x scripts/create-release.sh
             scripts/create-release.sh $GITHUB_ORG $GITHUB_REPO $PACKAGE_NAME $VERSION
