@@ -808,7 +808,7 @@
                       var cname = '', disabled = false;
                       for (var i = 0; i < classes.length; i++) {
                           cname += classes[i] + ' ';
-                          if ( ['disabled','nodata','empty'].indexOf(classes[i]) > -1)
+                          if ( ['disabled','empty'].indexOf(classes[i]) > -1)
                               disabled = true;
                       }
                       if (!disabled)

@@ -186,28 +186,90 @@ define(["qlik"], function (qlik) {
                         show: function (data) {
                             return data.props.CustomRangesEnabled;
                         }
+                    },        
+                    ThisMonthDropDown: {
+                        type: "string",                        
+                        ref: "props.this",
+                        label: "This :",
+                        defaultValue: '',
+                        component: "dropdown",                                             
+                        show: function (data) {
+                            return data.props.CustomRangesEnabled;
+                        },
+                        options: [{
+                            value: 'd',
+                            label: 'Day'
+                        }, {
+                            value: 'm',
+                            label: 'Month'
+                        }, {
+                            value: 'q',
+                            label: 'Quarter'
+                        }, {
+                            value: 'y',
+                            label: 'Year'
+                    }],
                     },
                     ThisMonth: {
                         type: "string",
-                        ref: "props.thisMonth",
-                        label: "This Month",
+                        ref: "props.thisLabel",
                         defaultValue: "This Month",
-                        expression: "optional",
                         show: function (data) {
                             return data.props.CustomRangesEnabled;
                         }
                     },
                     LastMonth: {
-                        type: "string",
-                        ref: "props.lastMonth",
-                        label: "Last Month",
-                        defaultValue: "Last Month",
-                        expression: "optional",
+                        type: "string",                        
+                        ref: "props.last",
+                        label: "Last :",
+                        component: "dropdown",
+                        defaultValue: '',                        
                         show: function (data) {
                             return data.props.CustomRangesEnabled;
+                        },
+                        options: [{
+                            value: 'd',
+                            label: 'Day'
+                        }, {
+                            value: 'm',
+                            label: 'Month'
+                        }, {
+                            value: 'q',
+                            label: 'Quarter'
+                        }, {
+                            value: 'y',
+                            label: 'Year'
+                    }],
+                    },
+                    numberOf: {
+                        type: 'number',
+                        ref: 'numberOf',
+                        label: 'Last number Of :', 
+                        defaultValue: '1', 
+                        show: function (data) {
+                            return data.props.CustomRangesEnabled && ['d','m','q','y'].indexOf(data.props.last) > -1;
                         }
-                    }
-                }
+                    },
+                    numberOftext: {
+                        component: 'text',
+                        ref:'number',
+                        label: `Use to define the number of last days, months, quarters 
+                        or years you want to specify the Range for, any numnerical value like this: 1 or 2 or 3`,
+                        show: function (data) {
+                            return data.props.CustomRangesEnabled && ['d','m','q','y'].indexOf(data.props.last) > -1;
+                        }
+                    },
+                    previousOrLastValues: {
+                        ref: 'previousOrLast',
+                        type: 'boolean',
+                        label: 'Include current month',
+                        component: 'checkbox',
+                        defaultValue: false,
+                        show: function (data) {
+                            return data.props.CustomRangesEnabled && ['d','m','q','y'].indexOf(data.props.last) > -1;
+                        }
+                    },  
+                },
             },
             header1: {
                 type: "items",

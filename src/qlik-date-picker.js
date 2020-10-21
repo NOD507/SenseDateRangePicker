@@ -224,7 +224,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
                                 // Handling timestamp case separately
                                 pickStart = moment.utc(pickStart.format("YYYYMMDD").toString(), "YYYYMMDD"),
                                 pickEnd = moment.utc(pickEnd.format("YYYYMMDD").toString(), "YYYYMMDD");
-                            }
+                            }                            
                             var dateBinarySearch = function(seachDate, lowIndex, highIndex) {
                                 if (lowIndex === highIndex) {
                                     return lowIndex;
@@ -267,7 +267,14 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
                                 highIndex = dateBinarySearch(pickStart, lowIndex, lastIndex);
                                 qElemNumbers = layout.qListObject.qDataPages[0].qMatrix
                                 .slice(lowIndex, highIndex + 1).map(function (fieldValue) {
-                                    return fieldValue[0].qElemNumber;
+                                    var date = createMoment(fieldValue[0].qText, qlikDateFormat);                                    
+                                    if(date.isSame(pickEnd) || date.isSame(pickStart)) {
+                                            return fieldValue[0].qElemNumber;
+                                    } else if(date.isBefore(pickEnd) && date.isAfter(pickStart)) {
+                                        return fieldValue[0].qElemNumber;
+                                    } else {
+                                        return -1;
+                                    }                                                             
                                 });
                             }
                             self.backendApi.selectValues(0, qElemNumbers, false);
