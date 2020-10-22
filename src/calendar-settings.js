@@ -125,6 +125,12 @@ define(["qlik"], function (qlik) {
             }
         }
     };
+    // This creates a divider in the property panel without showing any warnings
+    var divider = {
+        type: 'items',
+        grouped: true,
+        items: { divider: { type: 'items' } },
+  };
     var CalendarSettings = {
         component: "expandable-items",
         label: "Calendar Settings",
@@ -132,142 +138,153 @@ define(["qlik"], function (qlik) {
             ranges: {
                 type: "items",
                 label: "Predefined ranges",
+                grouped: true,
                 items: {
-                    CustomRangesSwitch: {
-                        type: "boolean",
-                        component: "switch",
-                        label: "Show predefined ranges",
-                        ref: "props.CustomRangesEnabled",
-                        options: [{
-                            value: true,
-                            translation: "properties.on"
-                        }, {
-                            value: false,
-                            translation: "properties.off"
-                        }],
-                        defaultValue: true
-                    },
-                    CustomRange: {
-                        type: "string",
-                        ref: "props.customRangeLabel",
-                        label: "Custom Range",
-                        defaultValue: "Range",
-                        expression: "optional",
-                        show: function (data) {
-                            return data.props.CustomRangesEnabled;
-                        }
-                    },
-                    Today: {
-                        type: "string",
-                        ref: "props.today",
-                        label: "Today",
-                        defaultValue: "Today",
-                        expression: "optional",
-                        show: function (data) {
-                            return data.props.CustomRangesEnabled;
-                        }
-                    },
-                    Yesterday: {
-                        type: "string",
-                        ref: "props.yesterday",
-                        label: "Yesterday",
-                        defaultValue: "Yesterday",
-                        expression: "optional",
-                        show: function (data) {
-                            return data.props.CustomRangesEnabled;
-                        }
-                    },
-                    LastDays: {
-                        type: "string",
-                        ref: "props.lastXDays",
-                        label: "Last $ days",
-                        defaultValue: "Last $ days",
-                        expression: "optional",
-                        show: function (data) {
-                            return data.props.CustomRangesEnabled;
-                        }
-                    },        
-                    ThisMonthDropDown: {
-                        type: "string",                        
-                        ref: "props.this",
-                        label: "This :",
-                        defaultValue: '',
-                        component: "dropdown",                                             
-                        show: function (data) {
-                            return data.props.CustomRangesEnabled;
+                    showPredefinedRanges: {
+                        type: 'items',
+                        items: {
+                            CustomRangesSwitch: {
+                                type: "boolean",
+                                component: "switch",
+                                label: "Show predefined ranges",
+                                ref: "props.CustomRangesEnabled",
+                                options: [{
+                                    value: true,
+                                    translation: "properties.on"
+                                }, {
+                                    value: false,
+                                    translation: "properties.off"
+                                }],
+                                defaultValue: true
+                            },
+                            CustomRange: {
+                            type: "string",
+                            ref: "props.customRangeLabel",
+                            label: "Custom Range",
+                            defaultValue: "Range",
+                            expression: "optional",
+                            show: function (data) {
+                                return data.props.CustomRangesEnabled;
+                            }
+                            },
+                            Today: {
+                            type: "string",
+                            ref: "props.today",
+                            label: "Today",
+                            defaultValue: "Today",
+                            expression: "optional",
+                            show: function (data) {
+                                return data.props.CustomRangesEnabled;
+                            }
+                            },                    
+                            Yesterday: {
+                            type: "string",
+                            ref: "props.yesterday",
+                            label: "Yesterday",
+                            defaultValue: "Yesterday",
+                            expression: "optional",
+                            show: function (data) {
+                                return data.props.CustomRangesEnabled;
+                            }
+                            },
+                            LastDays: {
+                            type: "string",
+                            ref: "props.lastXDays",
+                            label: "Last $ days",
+                            defaultValue: "Last $ days",
+                            expression: "optional",
+                            show: function (data) {
+                                return data.props.CustomRangesEnabled;
+                            }
+                            },
                         },
-                        options: [{
-                            value: 'd',
-                            label: 'Day'
-                        }, {
-                            value: 'm',
-                            label: 'Month'
-                        }, {
-                            value: 'q',
-                            label: 'Quarter'
-                        }, {
-                            value: 'y',
-                            label: 'Year'
-                    }],
                     },
-                    ThisMonth: {
-                        type: "string",
-                        ref: "props.thisLabel",
-                        defaultValue: "This Month",
-                        show: function (data) {
-                            return data.props.CustomRangesEnabled;
-                        }
-                    },
-                    LastMonth: {
-                        type: "string",                        
-                        ref: "props.last",
-                        label: "Last :",
-                        component: "dropdown",
-                        defaultValue: '',                        
-                        show: function (data) {
-                            return data.props.CustomRangesEnabled;
+                    showCustomRangeThis: {
+                        type: 'items',
+                        items: {        
+                            ThisMonthDropDown: {
+                            type: "string",                        
+                            ref: "props.this",
+                            label: "This :",                        
+                            component: "dropdown",                                             
+                            show: function (data) {
+                                return data.props.CustomRangesEnabled;
+                            },
+                            options: [{
+                                value: 'd',
+                                label: 'Day'
+                            }, {
+                                value: 'm',
+                                label: 'Month'
+                            }, {
+                                value: 'q',
+                                label: 'Quarter'
+                            }, {
+                                value: 'y',
+                                label: 'Year'
+                            },{
+                                value: 'n',
+                                label: 'None'
+                            }],
+                            },
+                            ThisMonth: {
+                            type: "string",
+                            ref: "props.thisLabel",
+                            defaultValue: "This Month",
+                            show: function (data) {
+                                return data.props.CustomRangesEnabled;
+                            }
+                            },
                         },
-                        options: [{
-                            value: 'd',
-                            label: 'Day'
-                        }, {
-                            value: 'm',
-                            label: 'Month'
-                        }, {
-                            value: 'q',
-                            label: 'Quarter'
-                        }, {
-                            value: 'y',
-                            label: 'Year'
-                    }],
                     },
-                    numberOf: {
-                        type: 'number',
-                        ref: 'numberOf',
-                        label: 'Last number Of :', 
-                        defaultValue: '1', 
-                        show: function (data) {
-                            return data.props.CustomRangesEnabled && ['d','m','q','y'].indexOf(data.props.last) > -1;
-                        }
-                    },
-                    numberOftext: {
-                        component: 'text',
-                        ref:'number',
-                        label: `Use to define the number of last days, months, quarters 
-                        or years you want to specify the Range for, any numnerical value like this: 1 or 2 or 3`,
-                        show: function (data) {
-                            return data.props.CustomRangesEnabled && ['d','m','q','y'].indexOf(data.props.last) > -1;
-                        }
-                    },
-                    previousOrLastValues: {
-                        ref: 'previousOrLast',
-                        type: 'boolean',
-                        label: 'Include current month',
-                        component: 'checkbox',
-                        defaultValue: false,
-                        show: function (data) {
-                            return data.props.CustomRangesEnabled && ['d','m','q','y'].indexOf(data.props.last) > -1;
-                        }
+                    showCustomRangeLast: {
+                        type: 'items',
+                        items: {     
+                            LastMonth: {
+                            type: "string",                        
+                            ref: "props.last",
+                            label: "Last :",
+                            component: "dropdown",                                                
+                            show: function (data) {
+                                return data.props.CustomRangesEnabled;
+                            },
+                            options: [{
+                                value: 'd',
+                                label: 'Day'
+                            }, {
+                                value: 'm',
+                                label: 'Month'
+                            }, {
+                                value: 'q',
+                                label: 'Quarter'
+                            }, {
+                                value: 'y',
+                                label: 'Year'
+                            },{
+                                value: 'n',
+                                label: 'None'
+                            }],
+                            },
+                            numberOf: {
+                            type: 'number',
+                            ref: 'numberOf',
+                            label: 'Last number Of :', 
+                            defaultValue: '1', 
+                            show: function (data) {
+                                return data.props.CustomRangesEnabled && ['d','m','q','y'].indexOf(data.props.last) > -1;
+                            }
+                            },                        
+                            previousOrLastValues: {
+                            ref: 'previousOrLast',
+                            type: 'boolean',
+                            label: 'Include current',
+                            component: 'checkbox',
+                            defaultValue: false,
+                            show: function (data) {
+                                return data.props.CustomRangesEnabled && ['d','m','q','y'].indexOf(data.props.last) > -1;
+                            }   
+                            },
+                        },
                     },  
                 },
             },

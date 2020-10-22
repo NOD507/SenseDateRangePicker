@@ -24,7 +24,15 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
             ranges[props.yesterday] = [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').startOf('day')];
             ranges[props.lastXDays.replace("$", "7")] = [moment().subtract(6, 'days').startOf('day'), moment().startOf('day')];
             ranges[props.lastXDays.replace("$", "30")] = [moment().subtract(29, 'days').startOf('day'), moment().startOf('day')];
-            ranges[props.thisMonth] = [moment().startOf('month').startOf('day'), moment().endOf('month').startOf('day')];
+            if (props.this === "d") {
+                ranges[props.thisLabel] = [moment().startOf('day'), moment().startOf('day')];
+            } else if (props.this === "m") {
+                ranges[props.thisLabel] = [moment().startOf('month').startOf('day'), moment().endOf('month').startOf('day')];
+            } else if (props.this === "q") {
+                ranges[props.thisLabel] = [moment().startOf('quarter').startOf('day'), moment().endOf('quarter').startOf('day')];
+            } else if (props.this === "y") {
+                ranges[props.thisLabel] = [moment().startOf('year').startOf('day'), moment().endOf('quarter').startOf('day')];
+            }
             ranges[props.lastMonth] = [moment().subtract(1, 'month').startOf('month').startOf('day'), moment().subtract(1, 'month').endOf('month').startOf('day')];
             return ranges;
         }
@@ -142,12 +150,17 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
                 function canInteract() {
                     return interactionState === 1;
                 }
+
+                function isQlikCloud(){
+                    const qlikCloudRegEx = /\.(qlik-stage|qlikcloud)\.com/;
+                    const matcher = window.location.hostname.match(qlikCloudRegEx) || [];
+                    return matcher.length;
+                }
                 this.dateStates = createDateStates(layout.qListObject.qDataPages);
                 if (!self.app) {
                     self.app = qlik.currApp(this);
                 }
 
-                //console.log('dateStates', this.dateStates);
                 var qlikDateFormat = layout.qListObject.qDimensionInfo.qNumFormat.qFmt
                     || self.app.model.layout.qLocaleInfo.qDateFmt;
                 var outDateFormat = layout.props.format || qlikDateFormat;
@@ -207,6 +220,9 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
                     config.ranges = createRanges(layout.props);
                 }
 
+                if (!isQlikCloud()) {
+                   // alert('Not in Cloud')
+                }
                 if (canInteract()) {
                     $element.find('.show-range').qlikdaterangepicker(config, function (pickStart, pickEnd, label) {
                         if (!noSelections && pickStart.isValid() && pickEnd.isValid()) {
