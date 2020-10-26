@@ -228,19 +228,19 @@ define(["qlik"], function (qlik) {
                             }],
                             },
                             ThisMonth: {
-                            type: "string",
-                            ref: "props.thisLabel",
-                            defaultValue: "This Month",
-                            show: function (data) {
-                                return data.props.CustomRangesEnabled;
-                            }
+                                type: "string",
+                                ref: "props.thisLabel",
+                                defaultValue: "This Month",
+                                show: function (data) {
+                                    return data.props.CustomRangesEnabled;
+                                }
                             },
                         },
                     },
                     showCustomRangeLast: {
                         type: 'items',
                         items: {     
-                            LastMonth: {
+                            LastMonthDropDown: {
                             type: "string",                        
                             ref: "props.last",
                             label: "Last :",
@@ -265,17 +265,25 @@ define(["qlik"], function (qlik) {
                                 label: 'None'
                             }],
                             },
+                            LastMonth: {
+                                type: "string",
+                                ref: "props.lastLabel",
+                                defaultValue: "Last Month",
+                                show: function (data) {
+                                    return data.props.CustomRangesEnabled && ['d','m','q','y'].indexOf(data.props.last) > -1;
+                                }
+                            },
                             numberOf: {
-                            type: 'number',
-                            ref: 'numberOf',
-                            label: 'Last number Of :', 
-                            defaultValue: '1', 
-                            show: function (data) {
-                                return data.props.CustomRangesEnabled && ['d','m','q','y'].indexOf(data.props.last) > -1;
-                            }
+                                type: 'number',
+                                ref: 'props.numberOf',
+                                label: 'Last number Of :', 
+                                defaultValue: '1', 
+                                show: function (data) {
+                                    return data.props.CustomRangesEnabled && ['d','m','q','y'].indexOf(data.props.last) > -1;
+                                }
                             },                        
                             previousOrLastValues: {
-                            ref: 'previousOrLast',
+                            ref: 'props.previousOrLast',
                             type: 'boolean',
                             label: 'Include current',
                             component: 'checkbox',

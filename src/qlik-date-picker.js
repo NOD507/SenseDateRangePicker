@@ -20,6 +20,8 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
         }
         function createRanges(props) {
             var ranges = {};
+            var numberOf = props.numberOf;
+            var includeCurrent = props.previousOrLast;
             ranges[props.today] = [moment().startOf('day'), moment().startOf('day')];
             ranges[props.yesterday] = [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').startOf('day')];
             ranges[props.lastXDays.replace("$", "7")] = [moment().subtract(6, 'days').startOf('day'), moment().startOf('day')];
@@ -31,9 +33,30 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
             } else if (props.this === "q") {
                 ranges[props.thisLabel] = [moment().startOf('quarter').startOf('day'), moment().endOf('quarter').startOf('day')];
             } else if (props.this === "y") {
-                ranges[props.thisLabel] = [moment().startOf('year').startOf('day'), moment().endOf('quarter').startOf('day')];
+                ranges[props.thisLabel] = [moment().startOf('year').startOf('day'), moment().endOf('year').startOf('day')];
             }
-            ranges[props.lastMonth] = [moment().subtract(1, 'month').startOf('month').startOf('day'), moment().subtract(1, 'month').endOf('month').startOf('day')];
+            if(!includeCurrent) {
+                if (props.last === "d") {
+                    ranges[props.lastLabel] = [moment().subtract(numberOf, 'days').startOf('day'), moment().subtract(1, 'days').startOf('day')];
+                } else if (props.last === "m") {
+                    ranges[props.lastLabel] = [moment().subtract(numberOf, 'months').startOf('month').startOf('day'), moment().subtract(1, 'months').endOf('month').startOf('day')];
+                } else if (props.last === "q") {
+                    ranges[props.lastLabel] = [moment().subtract(numberOf,'quarters').startOf('quarter').startOf('day'), moment().subtract(1, 'quarters').endOf('quarter').startOf('day')];
+                } else if (props.last === "y") {
+                    ranges[props.lastLabel] = [moment().subtract(numberOf,'years').startOf('year').startOf('day'), moment().subtract(1,'years').endOf('year').startOf('day')];
+                }
+            } else {
+                if (props.last === "d") {
+                    ranges[props.lastLabel] = [moment().subtract(numberOf -1, 'days').startOf('day'), moment().startOf('day')];
+                } else if (props.last === "m") {
+                    ranges[props.lastLabel] = [moment().subtract(numberOf - 1, 'months').startOf('month').startOf('day'), moment().endOf('month').startOf('day')];
+                } else if (props.last === "q") {
+                    ranges[props.lastLabel] = [moment().subtract(numberOf -1,'quarters').startOf('quarter').startOf('day'), moment().endOf('quarter').startOf('day')];
+                } else if (props.last === "y") {
+                    ranges[props.lastLabel] = [moment().subtract(numberOf -1,'years').startOf('year').startOf('day'), moment().endOf('year').startOf('day')];
+                }
+
+            }          
             return ranges;
         }
         function createDateStates(pages) {
