@@ -18,45 +18,74 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
             }
             return moment.utc(createDate(str), 'YYYYMMDD');
         }
+        function isQlikCloud(){
+            const qlikCloudRegEx = /\.(qlik-stage|qlikcloud)\.com/;
+            const matcher = window.location.hostname.match(qlikCloudRegEx) || [];
+            return matcher.length;
+        }
         function createRanges(props) {
             var ranges = {};
-            var numberOf = props.numberOf;
-            var includeCurrent = props.previousOrLast;
+            if( !isQlikCloud() ) {
+                var numberOf = props.numberOf,
+                includeCurrent = props.previousOrLast;
+                if(props.this == undefined) {
+                    props.this = "m";
+                }
+                if(props.thisLabel == undefined) {
+                    props.thisLabel = props.thisMonth;
+                }
+                if(props.last == undefined) {
+                    props.last = "m";
+                }
+                if(props.lastLabel == undefined) {
+                    props.lastLabel = props.lastMonth;
+                }
+                if(numberOf == undefined) {
+                    numberOf = 1;
+                }
+                if(includeCurrent == undefined) {
+                    includeCurrent = true;
+                }
+            }
             ranges[props.today] = [moment().startOf('day'), moment().startOf('day')];
             ranges[props.yesterday] = [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').startOf('day')];
             ranges[props.lastXDays.replace("$", "7")] = [moment().subtract(6, 'days').startOf('day'), moment().startOf('day')];
             ranges[props.lastXDays.replace("$", "30")] = [moment().subtract(29, 'days').startOf('day'), moment().startOf('day')];
-            if (props.this === "d") {
-                ranges[props.thisLabel] = [moment().startOf('day'), moment().startOf('day')];
-            } else if (props.this === "m") {
-                ranges[props.thisLabel] = [moment().startOf('month').startOf('day'), moment().endOf('month').startOf('day')];
-            } else if (props.this === "q") {
-                ranges[props.thisLabel] = [moment().startOf('quarter').startOf('day'), moment().endOf('quarter').startOf('day')];
-            } else if (props.this === "y") {
-                ranges[props.thisLabel] = [moment().startOf('year').startOf('day'), moment().endOf('year').startOf('day')];
-            }
-            if(!includeCurrent) {
-                if (props.last === "d") {
-                    ranges[props.lastLabel] = [moment().subtract(numberOf, 'days').startOf('day'), moment().subtract(1, 'days').startOf('day')];
-                } else if (props.last === "m") {
-                    ranges[props.lastLabel] = [moment().subtract(numberOf, 'months').startOf('month').startOf('day'), moment().subtract(1, 'months').endOf('month').startOf('day')];
-                } else if (props.last === "q") {
-                    ranges[props.lastLabel] = [moment().subtract(numberOf,'quarters').startOf('quarter').startOf('day'), moment().subtract(1, 'quarters').endOf('quarter').startOf('day')];
-                } else if (props.last === "y") {
-                    ranges[props.lastLabel] = [moment().subtract(numberOf,'years').startOf('year').startOf('day'), moment().subtract(1,'years').endOf('year').startOf('day')];
-                }
+            if( isQlikCloud() ) {
+                ranges[props.thisMonth] = [moment().startOf('month').startOf('day'), moment().endOf('month').startOf('day')];
+                ranges[props.lastMonth] = [moment().subtract(1, 'month').startOf('month').startOf('day'), moment().subtract(1, 'month').endOf('month').startOf('day')];
             } else {
-                if (props.last === "d") {
-                    ranges[props.lastLabel] = [moment().subtract(numberOf -1, 'days').startOf('day'), moment().startOf('day')];
-                } else if (props.last === "m") {
-                    ranges[props.lastLabel] = [moment().subtract(numberOf - 1, 'months').startOf('month').startOf('day'), moment().endOf('month').startOf('day')];
-                } else if (props.last === "q") {
-                    ranges[props.lastLabel] = [moment().subtract(numberOf -1,'quarters').startOf('quarter').startOf('day'), moment().endOf('quarter').startOf('day')];
-                } else if (props.last === "y") {
-                    ranges[props.lastLabel] = [moment().subtract(numberOf -1,'years').startOf('year').startOf('day'), moment().endOf('year').startOf('day')];
+                if (props.this === "d") {
+                    ranges[props.thisLabel] = [moment().startOf('day'), moment().startOf('day')];
+                } else if (props.this === "m") {
+                    ranges[props.thisLabel] = [moment().startOf('month').startOf('day'), moment().endOf('month').startOf('day')];
+                } else if (props.this === "q") {
+                    ranges[props.thisLabel] = [moment().startOf('quarter').startOf('day'), moment().endOf('quarter').startOf('day')];
+                } else if (props.this === "y") {
+                    ranges[props.thisLabel] = [moment().startOf('year').startOf('day'), moment().endOf('year').startOf('day')];
                 }
-
-            }          
+                if(!includeCurrent) {
+                    if (props.last === "d") {
+                        ranges[props.lastLabel] = [moment().subtract(numberOf, 'days').startOf('day'), moment().subtract(1, 'days').startOf('day')];
+                    } else if (props.last === "m") {
+                        ranges[props.lastLabel] = [moment().subtract(numberOf, 'months').startOf('month').startOf('day'), moment().subtract(1, 'months').endOf('month').startOf('day')];
+                    } else if (props.last === "q") {
+                        ranges[props.lastLabel] = [moment().subtract(numberOf,'quarters').startOf('quarter').startOf('day'), moment().subtract(1, 'quarters').endOf('quarter').startOf('day')];
+                    } else if (props.last === "y") {
+                        ranges[props.lastLabel] = [moment().subtract(numberOf,'years').startOf('year').startOf('day'), moment().subtract(1,'years').endOf('year').startOf('day')];
+                    }
+                } else {
+                    if (props.last === "d") {
+                        ranges[props.lastLabel] = [moment().subtract(numberOf -1, 'days').startOf('day'), moment().startOf('day')];
+                    } else if (props.last === "m") {
+                        ranges[props.lastLabel] = [moment().subtract(numberOf - 1, 'months').startOf('month').startOf('day'), moment().endOf('month').startOf('day')];
+                    } else if (props.last === "q") {
+                        ranges[props.lastLabel] = [moment().subtract(numberOf -1,'quarters').startOf('quarter').startOf('day'), moment().endOf('quarter').startOf('day')];
+                    } else if (props.last === "y") {
+                        ranges[props.lastLabel] = [moment().subtract(numberOf -1,'years').startOf('year').startOf('day'), moment().endOf('year').startOf('day')];
+                    }
+                }   
+            }       
             return ranges;
         }
         function createDateStates(pages) {
@@ -174,11 +203,6 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
                     return interactionState === 1;
                 }
 
-                function isQlikCloud(){
-                    const qlikCloudRegEx = /\.(qlik-stage|qlikcloud)\.com/;
-                    const matcher = window.location.hostname.match(qlikCloudRegEx) || [];
-                    return matcher.length;
-                }
                 this.dateStates = createDateStates(layout.qListObject.qDataPages);
                 if (!self.app) {
                     self.app = qlik.currApp(this);
@@ -242,15 +266,11 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
                     config.locale.customRangeLabel = layout.props.customRangeLabel;
                     config.ranges = createRanges(layout.props);
                 }
-
-                if (!isQlikCloud()) {
-                   // alert('Not in Cloud')
-                }
                 if (canInteract()) {
                     $element.find('.show-range').qlikdaterangepicker(config, function (pickStart, pickEnd, label) {
                         if (!noSelections && pickStart.isValid() && pickEnd.isValid()) {
                             
-                            var pickStartString, pickEndString,lastIndex, lowIndex, highIndex, qElemNumbers;                            
+                            var pickStartString, pickEndString,lastIndex, lowIndex, highIndex, qElemNumbers;
                             // The conversion to UTC below doesn't work correctly for Timestamp, 
                             // so checking the format which is '###0' for timestamps and doing different conversion formats.
                             if (qlikDateFormat.indexOf('#') === -1) { 
