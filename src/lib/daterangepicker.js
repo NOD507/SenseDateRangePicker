@@ -599,7 +599,13 @@
               // looks like we don't do anything with active ranges
               this.showCalendars();
           },
-  
+
+          isQlikCloud: function() {
+            const qlikCloudRegEx = /\.(qlik-stage|qlikcloud)\.com/;
+            const matcher = window.location.hostname.match(qlikCloudRegEx) || [];
+            return matcher.length;
+          },
+
           renderCalendar: function(side) {
               //
               // Build the matrix of dates that will populate the calendar
@@ -808,8 +814,15 @@
                       var cname = '', disabled = false;
                       for (var i = 0; i < classes.length; i++) {
                           cname += classes[i] + ' ';
-                          if ( ['disabled','empty'].indexOf(classes[i]) > -1)
-                              disabled = true;
+                          if ( this.isQlikCloud() ) {
+                            if ( ['disabled','nodata','empty'].indexOf(classes[i]) > -1) {
+                                disabled = true;
+                            }
+                          } else {
+                            if ( ['disabled','empty'].indexOf(classes[i]) > -1) {
+                                disabled = true;
+                            }
+                          }    
                       }
                       if (!disabled)
                           cname += 'available';
