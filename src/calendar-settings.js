@@ -284,7 +284,7 @@ define(["qlik"], function (qlik) {
                             numberOf: {
                                 type: 'number',
                                 ref: 'props.numberOf',
-                                label: 'Last number Of :', 
+                                label: 'Last number of :', 
                                 defaultValue: '1', 
                                 show: function (data) {
                                     return data.props.CustomRangesEnabled && ['d','m','q','y'].indexOf(data.props.last) > -1;
