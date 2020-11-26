@@ -295,7 +295,7 @@ define(["qlik"], function (qlik) {
                             type: 'boolean',
                             label: 'Include current',
                             component: 'checkbox',
-                            defaultValue: true,
+                            defaultValue: false,
                             show: function (data) {
                                 return data.props.CustomRangesEnabled && ['d','m','q','y'].indexOf(data.props.last) > -1;
                             }   

@@ -44,7 +44,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
                     numberOf = 1;
                 }
                 if(includeCurrent == undefined) {
-                    includeCurrent = true;
+                    includeCurrent = false;
                 }
             }
             ranges[props.today] = [moment().startOf('day'), moment().startOf('day')];
