@@ -1309,18 +1309,27 @@
                       date = date.clone().hour(hour).minute(minute).second(second);
                   }
                   this.setEndDate(date.clone());
-                  if (this.autoApply)
-                      this.clickApplyNoData(e);
+                  if (this.autoApply) {
+                    if (this.isQlikCloud()) {
+                        this.clickApply()
+                    } else {
+                        this.clickApplyNoData(e);
+                    }
+                  }
               }
   
               if (this.singleDatePicker) {
                   this.setEndDate(this.startDate);
-                  if (!this.timePicker)
+                  if (!this.timePicker) {
+                    if (this.isQlikCloud()) {
+                      this.clickApply()
+                    } else {
                       this.clickApplyNoData(e);
-              }
+                    }
+                  }
+                }
   
-              this.updateView();
-  
+              this.updateView();  
           },
           
           clickApplyNoData: function(e) {

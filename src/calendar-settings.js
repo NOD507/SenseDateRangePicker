@@ -211,11 +211,24 @@ define(["qlik"], function (qlik) {
                             ThisMonthDropDown: {
                             type: "string",                        
                             ref: "props.this",
-                            label: "This :",                        
+                            label: "This",                        
                             component: "dropdown", 
                             defaultValue: 'm',                                           
                             show: function (data) {
                                 return data.props.CustomRangesEnabled;
+                            },
+                            change: function (data) {                                    
+                                if (data.props.this === 'd') {
+                                    data.props.thisLabel = "This Day";
+                                } else if(data.props.this === 'm') {
+                                    data.props.thisLabel = "This Month";
+                                } else if(data.props.this === 'q') {
+                                    data.props.thisLabel = "This Quarter";
+                                } else if(data.props.this === 'y') {
+                                    data.props.thisLabel = "This Year";
+                                } else if(data.props.this === 'n') {
+                                    data.props.thisLabel = "";
+                                }
                             },
                             options: [{
                                 value: 'd',
@@ -238,9 +251,23 @@ define(["qlik"], function (qlik) {
                                 type: "string",
                                 ref: "props.thisLabel",
                                 defaultValue: "This Month",
+                                expression: 'optional',
                                 show: function (data) {
                                     return data.props.CustomRangesEnabled;
-                                }
+                                },
+                                change: function (data) {                                    
+                                    if (data.props.this === 'd' && data.props.thisLabel === '') {
+                                        data.props.thisLabel = "This Day";
+                                    } else if(data.props.this === 'm' && data.props.thisLabel === '') {
+                                        data.props.thisLabel = "This Month";
+                                    } else if(data.props.this === 'q' && data.props.thisLabel === '') {
+                                        data.props.thisLabel = "This Quarter";
+                                    } else if(data.props.this === 'y' && data.props.thisLabel === '') {
+                                        data.props.thisLabel = "This Year";
+                                    } else if(data.props.this === 'n') {
+                                        data.props.thisLabel = "";
+                                    }
+                                },                               
                             },
                         },
                     },
@@ -250,11 +277,24 @@ define(["qlik"], function (qlik) {
                             LastMonthDropDown: {
                             type: "string",                        
                             ref: "props.last",
-                            label: "Last :",
+                            label: "Last",
                             component: "dropdown",
                             defaultValue: 'm',                                               
                             show: function (data) {
                                 return data.props.CustomRangesEnabled;
+                            },
+                            change: function (data) {                                    
+                                if (data.props.last === 'd') {
+                                    data.props.lastLabel = "Last Day";
+                                } else if(data.props.last === 'm') {
+                                    data.props.lastLabel = "Last Month";
+                                } else if(data.props.last === 'q') {
+                                    data.props.lastLabel = "Last Quarter";
+                                } else if(data.props.last === 'y') {
+                                    data.props.lastLabel = "Last Year";
+                                } else if(data.props.last === 'n') {
+                                    data.props.lastLabel = "";
+                                }
                             },
                             options: [{
                                 value: 'd',
@@ -277,15 +317,29 @@ define(["qlik"], function (qlik) {
                                 type: "string",
                                 ref: "props.lastLabel",
                                 defaultValue: "Last Month",
+                                expression: 'optional',
                                 show: function (data) {
                                     return data.props.CustomRangesEnabled;
-                                }
+                                },
+                                change: function (data) {                                    
+                                    if (data.props.last === 'd' && data.props.lastLabel === '') {
+                                        data.props.lastLabel = "Last Day";
+                                    } else if(data.props.last === 'm' && data.props.lastLabel === '') {
+                                        data.props.lastLabel = "Last Month";
+                                    } else if(data.props.last === 'q' && data.props.lastLabel === '') {
+                                        data.props.lastLabel = "Last Quarter";
+                                    } else if(data.props.last === 'y' && data.props.lastLabel === '') {
+                                        data.props.lastLabel = "Last Year";
+                                    } else if(data.props.last === 'n') {
+                                        data.props.lastLabel = "";
+                                    }
+                                },
                             },
                             numberOf: {
                                 type: 'number',
                                 ref: 'props.numberOf',
-                                label: 'Last number of :', 
-                                defaultValue: '1', 
+                                label: 'Last number of', 
+                                defaultValue: 1,
                                 show: function (data) {
                                     return data.props.CustomRangesEnabled && ['d','m','q','y'].indexOf(data.props.last) > -1;
                                 }

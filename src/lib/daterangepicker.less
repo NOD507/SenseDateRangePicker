@@ -123,7 +123,7 @@ changed left and right rule names to prevent clash with sense client css */
 
   &.dropdown-menu {
     max-width: none;
-    height: 300px;
+    height: 310px;
     z-index: 5000!important;
   }
 
@@ -138,7 +138,7 @@ changed left and right rule names to prevent clash with sense client css */
   .error_nodata {
     margin-left: 100px;
     font-size: 13px;
-    font-weight: 550;
+    font-weight: 600;
     margin-left: 100px;
     margin-top: 4px;
   }
@@ -394,6 +394,16 @@ changed left and right rule names to prevent clash with sense client css */
 
   .hide{
       display:none;
+  }
+}
+/*Small- device scrollbar */
+@media screen and (max-width: 640px), screen and (max-height: 480px) {
+  .qlik-daterangepicker {
+    overflow-y: auto;
+  
+    .error_nodata {
+      margin-left: 10px;
+    }  
   }
 }
 
