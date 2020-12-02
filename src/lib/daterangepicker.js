@@ -101,10 +101,12 @@
           //allow setting options with data attributes
           //data-api options will be overwritten with custom javascript options
           options = $.extend(this.element.data(), options);
+          error_nodata = "No data available for the range selected. Please select again."
   
           //html template for the picker UI
           if (typeof options.template !== 'string')
               options.template = '<div id= "dropDown_' + options.id + '" div class="qlik-daterangepicker dropdown-menu" style="display:none">' +
+              '<div class="error_nodata" style="display:none">' + error_nodata + '</div>' +
                   '<div class="calendar dpleft">' +
                       '<div class="qlik-daterangepicker_input">' +
                         '<input class="input-mini" type="text" name="qlik-daterangepicker_start" value="" />' +
@@ -384,12 +386,14 @@
   
           this.container.addClass('opens' + this.opens);
   
+          if (this.isQlikCloud()) {
           //swap the position of the predefined ranges if opens right
-          if (typeof options.ranges !== 'undefined' && this.opens == 'right') {
-              var ranges = this.container.find('.ranges');
-              var html = ranges.clone();
-              ranges.remove();
-              this.container.find('.calendar.dpleft').parent().prepend(html);
+            if (typeof options.ranges !== 'undefined' && this.opens == 'right') {
+                var ranges = this.container.find('.ranges');
+                var html = ranges.clone();
+                ranges.remove();
+                this.container.find('.calendar.dpleft').parent().prepend(html);
+            }
           }
   
           //apply CSS classes and labels to buttons
@@ -599,7 +603,13 @@
               // looks like we don't do anything with active ranges
               this.showCalendars();
           },
-  
+
+          isQlikCloud: function() {
+            const qlikCloudRegEx = /\.(qlik-stage|qlikcloud)\.com/;
+            const matcher = window.location.hostname.match(qlikCloudRegEx) || [];
+            return matcher.length;
+          },
+
           renderCalendar: function(side) {
               //
               // Build the matrix of dates that will populate the calendar
@@ -808,8 +818,15 @@
                       var cname = '', disabled = false;
                       for (var i = 0; i < classes.length; i++) {
                           cname += classes[i] + ' ';
-                          if ( ['disabled','nodata','empty'].indexOf(classes[i]) > -1)
-                              disabled = true;
+                          if ( this.isQlikCloud() ) {
+                            if ( ['disabled','nodata','empty'].indexOf(classes[i]) > -1) {
+                                disabled = true;
+                            }
+                          } else {
+                            if ( ['disabled','empty'].indexOf(classes[i]) > -1) {
+                                disabled = true;
+                            }
+                          }    
                       }
                       if (!disabled)
                           cname += 'available';
@@ -1294,18 +1311,45 @@
                       date = date.clone().hour(hour).minute(minute).second(second);
                   }
                   this.setEndDate(date.clone());
-                  if (this.autoApply)
-                      this.clickApply();
+                  if (this.autoApply) {
+                    if (this.isQlikCloud()) {
+                        this.clickApply()
+                    } else {
+                        this.clickApplyNoData(e);
+                    }
+                  }
               }
   
               if (this.singleDatePicker) {
                   this.setEndDate(this.startDate);
-                  if (!this.timePicker)
-                      this.clickApply();
-              }
+                  if (!this.timePicker) {
+                    if (this.isQlikCloud()) {
+                      this.clickApply()
+                    } else {
+                      this.clickApplyNoData(e);
+                    }
+                  }
+                }
   
-              this.updateView();
-  
+              this.updateView();  
+          },
+          
+          clickApplyNoData: function(e) {
+            if (this.container.find(".in-range").hasClass("stateO") || 
+                this.container.find(".in-range").hasClass("stateA") || 
+                this.container.find(".in-range").hasClass("stateX") || 
+                this.container.find(".in-range").hasClass("stateS")) 
+            {
+                this.clickApply();                
+            } else if (this.container.find(".start-date").hasClass("nodata")) {
+                if ($(e.target).hasClass('nodata')) {                   
+                    this.container.find(".error_nodata").css("display", "block");
+                } else {
+                    this.clickApply();
+                }
+            } else {
+                this.clickApply();
+            }
           },
   
           clickApply: function(e) {
@@ -1315,7 +1359,7 @@
               // or we hide the date picker when clicking outside to cancel
               this.applyClicked = true;
               this.hide();
-              this.element.trigger('apply.qlik-daterangepicker', this);
+              this.element.trigger('apply.qlik-daterangepicker', this);             
           },
   
           clickCancel: function(e) {

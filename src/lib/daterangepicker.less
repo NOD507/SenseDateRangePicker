@@ -123,8 +123,7 @@ changed left and right rule names to prevent clash with sense client css */
 
   &.dropdown-menu {
     max-width: none;
-    height: 285px;
-    overflow: auto;
+    height: 310px;
     z-index: 5000!important;
   }
 
@@ -134,6 +133,14 @@ changed left and right rule names to prevent clash with sense client css */
 
   &.show-calendar .calendar {
     display: block;
+  }
+
+  .error_nodata {
+    margin-left: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-left: 100px;
+    margin-top: 4px;
   }
 
   .calendar {
@@ -221,6 +228,9 @@ changed left and right rule names to prevent clash with sense client css */
     color: #999;
     cursor: default;
   }
+  td.nodata {
+    color: #999;
+  }
   td.available:hover{
     background-color: rgba(0,0,0,.05); 
   }
@@ -239,11 +249,6 @@ changed left and right rule names to prevent clash with sense client css */
   }
   td.stateO {
     background-color: #fff;
-  }
-  td.nodata, td.nodata:hover {
-    background-color: #fff;
-    color:#aaa;
-    cursor: default;
   }
   &.in-selection {
     td.start-date, td.end-date, td.available:hover {
@@ -326,11 +331,11 @@ changed left and right rule names to prevent clash with sense client css */
   }
 
   .ranges {
+    height: 278px;
     font-size: 11px;
     background-color: rgb(250,250,250);
     color: rgb(107,107,107);
     float: none;
-    padding: 4px;
     text-align: left;
     .header {
       font-size: 13px;
@@ -352,7 +357,7 @@ changed left and right rule names to prevent clash with sense client css */
       border-radius: 4px;
       color: rgb(101,101,101);
       padding: 5px 12px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       cursor: pointer;
       &.disabled {
         font-weight:normal;
@@ -395,6 +400,16 @@ changed left and right rule names to prevent clash with sense client css */
 
   .hide{
       display:none;
+  }
+}
+/*Small- device scrollbar */
+@media screen and (max-width: 640px), screen and (max-height: 480px) {
+  .qlik-daterangepicker {
+    overflow-y: auto;
+  
+    .error_nodata {
+      margin-left: 10px;
+    }  
   }
 }
 
