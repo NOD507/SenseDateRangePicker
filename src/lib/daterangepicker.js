@@ -339,7 +339,7 @@
                   this.ranges[rangeHtml] = [start, end, disabled];
               }
   
-              var list = '<div class="header">Select:</div><ul>';
+              var list = '<div class="header"></div><ul>';
               for (range in this.ranges) {
                   list += this.ranges[range][2] ? '<li class="disabled">' :'<li>';
                   list += range + '</li>';
