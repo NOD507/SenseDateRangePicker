@@ -121,11 +121,11 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
                 if( !sortAscending ) {
                     html += startRange;
                     if (endRange !== null) {
-                        html += props.separator + endRange;
+                        html += encoder.encodeForHTML(props.separator) + endRange;
                     }
                 } else {
                     if( endRange!== null) {
-                        html += endRange + props.separator + startRange;
+                        html += endRange + encoder.encodeForHTML(props.separator) + startRange;
                     } else {
                         html += startRange;
                     }
