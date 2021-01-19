@@ -153,6 +153,14 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
                 "left";
             }
         }
+        function getTopPosition( element ) {
+            if ($(window).height() - element.offset().top > 310) {
+                return "down";
+            }
+            else {                
+                return "up";
+            }
+        }
         return {
             methods: { //for testability
                 createDate: createDate,
@@ -232,6 +240,7 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
                     "autoUpdateInput": false,
                     "autoApply": true,
                     "opens": getPosition($element),
+                    "top": getTopPosition($element),
                     "id": layout.qInfo.qId,
                     getClass: function (date) {
                         var d = date.format('YYYYMMDD');
