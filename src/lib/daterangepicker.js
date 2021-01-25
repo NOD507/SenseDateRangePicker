@@ -65,8 +65,7 @@
           this.opens = 'right';
           if (this.element.hasClass('pull-right'))
               this.opens = 'left';
-  
-          this.drops = 'down';
+          this.drops = options.top;
           if (this.element.hasClass('dropup'))
               this.drops = 'up';
   
@@ -219,6 +218,9 @@
   
           if (typeof options.opens === 'string')
               this.opens = options.opens;
+
+          if (typeof options.top === 'string')
+              this.top = options.top;
   
           if (typeof options.drops === 'string')
               this.drops = options.drops;
@@ -408,7 +410,6 @@
           //
           // event listeners
           //
-  
           this.container.find('.calendar')
               .on('click.qlik-daterangepicker', '.prev.available', $.proxy(this.clickPrev, this))
               .on('click.qlik-daterangepicker', '.next.available', $.proxy(this.clickNext, this))
