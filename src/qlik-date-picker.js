@@ -219,12 +219,19 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
                 var qlikDateFormat = layout.qListObject.qDimensionInfo.qNumFormat.qFmt
                     || self.app.model.layout.qLocaleInfo.qDateFmt;
                 var outDateFormat = layout.props.format || qlikDateFormat;
+                var minDate, maxDate, startDate, endDate;
                 moment.locale(layout.props.locale);
-                var minDate = createMoment(layout.props.minDate, qlikDateFormat);
-                var maxDate = createMoment(layout.props.maxDate, qlikDateFormat);
-                var startDate = createMoment(layout.props.startDate, qlikDateFormat);
-                var endDate = createMoment(layout.props.endDate, qlikDateFormat);
-
+                if (qlikDateFormat.indexOf('#') === -1) { 
+                    minDate = moment.utc(moment(layout.props.minDate).toDate());
+                    maxDate = moment.utc(moment(layout.props.maxDate).toDate());
+                    startDate = moment.utc(moment(layout.props.startDate).toDate());
+                    endDate = moment.utc(moment(layout.props.endDate).toDate());
+                } else {
+                    minDate = createMoment(layout.props.minDate, qlikDateFormat);
+                    maxDate = createMoment(layout.props.maxDate, qlikDateFormat);
+                    startDate = createMoment(layout.props.startDate, qlikDateFormat);
+                    endDate = createMoment(layout.props.endDate, qlikDateFormat);
+                }
                 $('#dropDown_' + layout.qInfo.qId).remove();
 
                 $element.html(createHtml(this.dateStates, outDateFormat, layout.props, sortAscending));
@@ -279,28 +286,26 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
                     $element.find('.show-range').qlikdaterangepicker(config, function (pickStart, pickEnd, label) {
                         if (!noSelections && pickStart.isValid() && pickEnd.isValid()) {
                             
-                            var pickStartString, pickEndString,lastIndex, lowIndex, highIndex, qElemNumbers;
+                            var lastIndex, lowIndex, highIndex, qElemNumbers;
                             // The conversion to UTC below doesn't work correctly for Timestamp, 
                             // so checking the format which is '###0' for timestamps and doing different conversion formats.
                             if (qlikDateFormat.indexOf('#') === -1) { 
                                 //To support various time zones, converting dates to a UTC format so they can be compared correctly.
-                                pickStartString = moment.utc(pickStart.format("YYYYMMDD").toString(), "YYYYMMDD").format(qlikDateFormat),
-                                pickEndString = moment.utc(pickEnd.format("YYYYMMDD").toString(), "YYYYMMDD").format(qlikDateFormat),
-                                pickStart = createMoment(pickStartString, qlikDateFormat),
-                                pickEnd = createMoment(pickEndString, qlikDateFormat);
+                                pickStart = moment.utc(moment(pickStart).toDate());
+                                pickEnd = moment.utc(moment(pickEnd).toDate());
                             } else {
                                 // Handling timestamp case separately
                                 pickStart = moment.utc(pickStart.format("YYYYMMDD").toString(), "YYYYMMDD"),
                                 pickEnd = moment.utc(pickEnd.format("YYYYMMDD").toString(), "YYYYMMDD");
-                            }                            
+                            }                         
                             var dateBinarySearch = function(seachDate, lowIndex, highIndex) {
                                 if (lowIndex === highIndex) {
                                     return lowIndex;
                                 }
-                                var middleIndex = lowIndex + Math.ceil((highIndex - lowIndex) / 2);                                
-                                var middleDate = createMoment(
+                                var middleIndex = lowIndex + Math.ceil((highIndex - lowIndex) / 2);
+                                var middleDate = qlikDateFormat.indexOf('#') === -1 ? moment.utc(moment(
                                     layout.qListObject.qDataPages[0].qMatrix[middleIndex][0].qText,
-                                    qlikDateFormat);    
+                                    qlikDateFormat).toDate()): createMoment(layout.qListObject.qDataPages[0].qMatrix[middleIndex][0].qText, qlikDateFormat);    
                                 // If the date object is created prior to September 2019, the order 
                                 //of dates shall be ascending and needs to be handled separately
                                 if (sortAscending) {
@@ -335,7 +340,12 @@ define(["qlik", "jquery", "./lib/moment.min", "./calendar-settings", "./lib/enco
                                 highIndex = dateBinarySearch(pickStart, lowIndex, lastIndex);
                                 qElemNumbers = layout.qListObject.qDataPages[0].qMatrix
                                 .slice(lowIndex, highIndex + 1).map(function (fieldValue) {
-                                    var date = createMoment(fieldValue[0].qText, qlikDateFormat);                                    
+                                    var date;
+                                    if (qlikDateFormat.indexOf('#') === -1) {                                     
+                                        date = moment.utc(moment(fieldValue[0].qText, qlikDateFormat).toDate());
+                                    } else {
+                                        date = createMoment(fieldValue[0].qText, qlikDateFormat);
+                                    }                                   
                                     if(date.isSame(pickEnd) || date.isSame(pickStart)) {
                                             return fieldValue[0].qElemNumber;
                                     } else if(date.isBefore(pickEnd) && date.isAfter(pickStart)) {
