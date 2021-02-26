@@ -1,0 +1,96 @@
+version: 2
+
+defaults: &defaults
+  working_directory: ~/qlik-date-picker
+  docker:
+    - image: circleci/node:stretch
+  environment:
+    GITHUB_ORG: "qlik-oss"
+    GITHUB_REPO: "SenseDateRangePicker"
+    PACKAGE_NAME: "qlik-date-picker"
+
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/qlik-date-picker
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - run:
+          name: Build and package
+          command: |
+            sudo chmod +x scripts/get-version.sh
+            export VERSION=$(scripts/get-version.sh)
+            echo "Version: $VERSION"
+            npm run build:zip
+          environment:
+            NODE_ENV: production
+      - persist_to_workspace:
+          root: ~/qlik-date-picker
+          paths:
+            - dist
+      - store_artifacts:
+          path: dist
+          destination: dist
+  blackduck:
+    docker:
+    - image: circleci/node:stretch-browsers
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - run:
+          name: BlackDuck scan
+          command: curl -s https://detect.synopsys.com/detect.sh | bash -s -- \
+            --blackduck.url="https://qliktech.blackducksoftware.com" \
+            --blackduck.trust.cert=true \
+            --blackduck.username="svc-blackduck" \
+            --blackduck.password=${svc_blackduck} \
+            --detect.project.name="SenseDateRangePicker"
+  deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/qlik-date-picker
+      - run:
+          name: Install ghr
+          command: |
+            sudo chmod +x scripts/install-ghr.sh
+            scripts/install-ghr.sh
+      - run:
+          name: Create GitHub Release
+          command: |
+            sudo chmod +x scripts/get-version.sh
+            export VERSION=$(scripts/get-version.sh)
+            echo "Version: $VERSION"
+            sudo chmod +x scripts/create-release.sh
+            scripts/create-release.sh $GITHUB_ORG $GITHUB_REPO $PACKAGE_NAME $VERSION
+
+workflows:
+  version: 2
+  master_flow:
+    jobs:
+      - build:
+          filters: # Required since jobs that requires this uses tag-filter
+            tags:
+              only: /.*/
+      - blackduck:
+          filters: # Required since jobs that requires this uses tag-filter
+            tags:
+              only: /.*/
+      - deploy:
+          requires:
+            - build
+            - blackduck
+          filters:
+            tags:
+              only:
+                - /^v.*/
+            branches:
+              # Have to ignore branches to make the tags-filter work
+              ignore: /.*/

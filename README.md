@@ -1,42 +1,24 @@
 # SenseDateRangePicker
-A date range picker extension for qliksense
+This extension is part of the extension bundles for Qlik Sense. The repository is maintained and moderated by Qlik RD.
 
-Based on http://www.daterangepicker.com/
+Feel free to fork and suggest pull requests for improvements and bug fixes. Changes will be moderated and reviewed before inclusion in future bundle versions. Please note that emphasis is on backward compatibility, i.e. breaking changes will most likely not be approved.
 
-Can be turned into a single date picker in the Calendar Settings.
-Also at Calendar Settings can choose all language locales that moment.js supports.
+Usage documentation for the extension is available at https://help.qlik.com.
 
+# Developing the extension
+If you want to do code changes to the extension follow these simple steps to get going.
 
-![preview](https://raw.githubusercontent.com/NOD507/SenseDateRangePicker/master/dateRangePicker.gif) 
+1. Get Qlik Sense Desktop
+1. Create a new app and add Date picker to a sheet.
+2. Clone the repository
+3. Run `yarn install`
+4. Run `npm run build` - to build a dev-version to the /dist folder.
+5. Move the content of the /dist folder to the extension directory. Usually in `C:/Users/<user>/Documents/Qlik/Sense/Extensions/qlik-date-picker`.
 
-#### 1.1.6
- * fixed today option in ranges disappears when max date is set to today. 
+## Release
+1. `git checkout master && git pull` to make sure you're up to date.
+2. `npm version <major/minor/patch>`
+3. `git push && git push --tags`
 
-#### 1.1.5
- * fixed date format fallback. 
-
-#### 1.1.4
- * fixed out of screen presentation issue when the daterangepicker was set on the left of the screen
-
-#### 1.1.3
- * option for start date and properties as expressions
- 
-#### 1.1.2
- * option for min and max date
- 
-#### 1.1.1
- * changed css rule names for sense 2.2 compatibility
-
-#### 1.1.0
- * Improved text update
-
-
-
-### TODO
- * add user defined ranges past 6 or 12 months, etc?
- 
- 
- 
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
+# Original Author
+[NOD507](https://github.com/NOD507)

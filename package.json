@@ -1,0 +1,37 @@
+{
+    "name": "qlik-date-picker",
+    "version": "2.28.0",
+    "description": "A calendar object that allows a user to make selections in a date field.",
+    "private": true,
+    "homepage": "http://branch.qlik.com/#/project/5697a878dcc497f80ed514bf",
+    "repository": "https://github.com/qlik-oss/SenseDateRangePicker/tree/qlik-date-picker",
+    "author": "Nodier Torres",
+    "license": "MIT",
+    "scripts": {
+        "build": "gulp build",
+        "build:zip": "gulp zip",
+        "test:unit": "aw chrome -c ./test/aw.config.js"
+    },
+    "devDependencies": {
+        "@after-work.js/aw": "6.0.11",
+        "angular": "1.7.2",
+        "@babel/cli": "7.8.4",
+        "@babel/core": "7.8.4",
+        "babel-plugin-istanbul": "6.0.0",
+        "del": "^2.0.2",
+        "gulp": "4.0.0",
+        "gulp-cssnano": "^2.1.0",
+        "gulp-dest": "^0.2.3",
+        "gulp-ignore": "^2.0.1",
+        "gulp-less": "^3.0.3",
+        "gulp-replace": "^0.5.4",
+        "gulp-terser": "1.2.0",
+        "gulp-util": "^3.0.7",
+        "gulp-zip": "^3.0.2",
+        "jquery": "^3.3.1",
+        "less-plugin-autoprefix": "^1.5.1",
+        "require-css": "^0.1.10",
+        "requirejs": "^2.3.6",
+        "uglify-save-license": "^0.4.1"
+    }
+}
